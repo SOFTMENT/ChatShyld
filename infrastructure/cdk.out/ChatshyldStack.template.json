@@ -1,0 +1,821 @@
+{
+ "Resources": {
+  "UsersTable9725E9C8": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "userId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "phone",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "GlobalSecondaryIndexes": [
+     {
+      "IndexName": "gsi_phone",
+      "KeySchema": [
+       {
+        "AttributeName": "phone",
+        "KeyType": "HASH"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "userId",
+      "KeyType": "HASH"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/UsersTable/Resource"
+   }
+  },
+  "SendOtpFnServiceRoleB9E4E0FE": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/SendOtpFn/ServiceRole/Resource"
+   }
+  },
+  "SendOtpFnA6E032A5": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-723609008675-${AWS::Region}"
+     },
+     "S3Key": "dc8ce87bf34bd5b29389a0602c4e58498246c699d4b64e97b4103cd218dff9c7.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "USERS_TABLE": {
+       "Ref": "UsersTable9725E9C8"
+      },
+      "PHONE_GSI": "gsi_phone",
+      "JWT_SECRET": "0c58fe6a71c3663728494eeb159cdf53c3b2098e26f34e67696313a8ce169df7c15d7f7f",
+      "JWT_TTL_SEC": "7200",
+      "TWILIO_ACCOUNT_SID": "AC256b1843957366ea8489ba3b1e27b34e",
+      "TWILIO_AUTH_TOKEN": "6cd7cae52a56c472999d3175a95feb98",
+      "TWILIO_VERIFY_SID": "VA8e18efe98dfb145f7ce00492939dd7ca",
+      "LOG_LEVEL": "INFO"
+     }
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "SendOtpFnServiceRoleB9E4E0FE",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Timeout": 10
+   },
+   "DependsOn": [
+    "SendOtpFnServiceRoleB9E4E0FE"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/SendOtpFn/Resource",
+    "aws:asset:path": "asset.dc8ce87bf34bd5b29389a0602c4e58498246c699d4b64e97b4103cd218dff9c7",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "SendOtpFnLogGroupFD819D41": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "SendOtpFnA6E032A5"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/SendOtpFn/LogGroup/Resource"
+   }
+  },
+  "VerifyOtpFnServiceRole76089F2F": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/VerifyOtpFn/ServiceRole/Resource"
+   }
+  },
+  "VerifyOtpFnServiceRoleDefaultPolicy2BA549D8": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "UsersTable9725E9C8",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "UsersTable9725E9C8",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "VerifyOtpFnServiceRoleDefaultPolicy2BA549D8",
+    "Roles": [
+     {
+      "Ref": "VerifyOtpFnServiceRole76089F2F"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/VerifyOtpFn/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "VerifyOtpFn7C64DA59": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-723609008675-${AWS::Region}"
+     },
+     "S3Key": "97f815716d9bf54a8948c9f515c34238ee9ad99839574c2ec514cdc385a4c784.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "USERS_TABLE": {
+       "Ref": "UsersTable9725E9C8"
+      },
+      "PHONE_GSI": "gsi_phone",
+      "JWT_SECRET": "0c58fe6a71c3663728494eeb159cdf53c3b2098e26f34e67696313a8ce169df7c15d7f7f",
+      "JWT_TTL_SEC": "7200",
+      "TWILIO_ACCOUNT_SID": "AC256b1843957366ea8489ba3b1e27b34e",
+      "TWILIO_AUTH_TOKEN": "6cd7cae52a56c472999d3175a95feb98",
+      "TWILIO_VERIFY_SID": "VA8e18efe98dfb145f7ce00492939dd7ca",
+      "LOG_LEVEL": "INFO"
+     }
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "VerifyOtpFnServiceRole76089F2F",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Timeout": 10
+   },
+   "DependsOn": [
+    "VerifyOtpFnServiceRoleDefaultPolicy2BA549D8",
+    "VerifyOtpFnServiceRole76089F2F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/VerifyOtpFn/Resource",
+    "aws:asset:path": "asset.97f815716d9bf54a8948c9f515c34238ee9ad99839574c2ec514cdc385a4c784",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "VerifyOtpFnLogGroup11DBF70E": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "VerifyOtpFn7C64DA59"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/VerifyOtpFn/LogGroup/Resource"
+   }
+  },
+  "ChatShyldHttpApiE87B938B": {
+   "Type": "AWS::ApiGatewayV2::Api",
+   "Properties": {
+    "CorsConfiguration": {
+     "AllowHeaders": [
+      "*"
+     ],
+     "AllowMethods": [
+      "*"
+     ],
+     "AllowOrigins": [
+      "*"
+     ]
+    },
+    "Name": "ChatShyldApi",
+    "ProtocolType": "HTTP"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/ChatShyldHttpApi/Resource"
+   }
+  },
+  "ChatShyldHttpApiDefaultStage6356CBEB": {
+   "Type": "AWS::ApiGatewayV2::Stage",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatShyldHttpApiE87B938B"
+    },
+    "AutoDeploy": true,
+    "StageName": "$default"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/ChatShyldHttpApi/DefaultStage/Resource"
+   }
+  },
+  "ChatShyldHttpApiPOSTauthsendotpSendOtpIntegration5796B4DF": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatShyldHttpApiE87B938B"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::GetAtt": [
+      "SendOtpFnA6E032A5",
+      "Arn"
+     ]
+    },
+    "PayloadFormatVersion": "2.0"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/ChatShyldHttpApi/POST--auth--send-otp/SendOtpIntegration/Resource"
+   }
+  },
+  "ChatShyldHttpApiPOSTauthsendotpSendOtpIntegrationPermissionB2FC339C": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "SendOtpFnA6E032A5",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":723609008675:",
+       {
+        "Ref": "ChatShyldHttpApiE87B938B"
+       },
+       "/*/*/auth/send-otp"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/ChatShyldHttpApi/POST--auth--send-otp/SendOtpIntegration-Permission"
+   }
+  },
+  "ChatShyldHttpApiPOSTauthsendotp2E581A68": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatShyldHttpApiE87B938B"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "POST /auth/send-otp",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "ChatShyldHttpApiPOSTauthsendotpSendOtpIntegration5796B4DF"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/ChatShyldHttpApi/POST--auth--send-otp/Resource"
+   }
+  },
+  "ChatShyldHttpApiPOSTauthverifyotpVerifyOtpIntegration8BBC8DD9": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatShyldHttpApiE87B938B"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::GetAtt": [
+      "VerifyOtpFn7C64DA59",
+      "Arn"
+     ]
+    },
+    "PayloadFormatVersion": "2.0"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/ChatShyldHttpApi/POST--auth--verify-otp/VerifyOtpIntegration/Resource"
+   }
+  },
+  "ChatShyldHttpApiPOSTauthverifyotpVerifyOtpIntegrationPermission8D9F3349": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "VerifyOtpFn7C64DA59",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":723609008675:",
+       {
+        "Ref": "ChatShyldHttpApiE87B938B"
+       },
+       "/*/*/auth/verify-otp"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/ChatShyldHttpApi/POST--auth--verify-otp/VerifyOtpIntegration-Permission"
+   }
+  },
+  "ChatShyldHttpApiPOSTauthverifyotpBA825DF7": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatShyldHttpApiE87B938B"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "POST /auth/verify-otp",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "ChatShyldHttpApiPOSTauthverifyotpVerifyOtpIntegration8BBC8DD9"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/ChatShyldHttpApi/POST--auth--verify-otp/Resource"
+   }
+  },
+  "ProdStage6F7F36FB": {
+   "Type": "AWS::ApiGatewayV2::Stage",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatShyldHttpApiE87B938B"
+    },
+    "AutoDeploy": true,
+    "DefaultRouteSettings": {
+     "ThrottlingBurstLimit": 50,
+     "ThrottlingRateLimit": 25
+    },
+    "StageName": "prod"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/ProdStage/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/71UwY7aMBD9lvq4Mu4urXrgFiq6RaUrGuihQgiZeJo1OHZkO2yjKP/esRNSVqhqD6uVQHbezJt5Hs94zMZ3d+z2DX9yo0wcR0ruWbPyPDtShHaNqDUvjEBwzfcKNg0pufXSS6O/QE0mDUE7kAm5IZT4ugzbFWkp2UulpM6/GhGgZfJjt5ylu3T27ftstUZfC4U5cbU0SmYYhwhw3poaqQ3hQtwrs+dqBZnRgtt6rgX8IhNML8Pu4U/O/5RTWnOALPitOzRZLEi7bbf0408dj9ZSxYu94DuNkg+OPcTlU6UjCzPbSns5BAftbd3vH7kWCuw5LTqZyg9+J2mNLtC/R7KuJDfhqH/7vVCyl4v0urK3VPKCNamJHcedqwoQ03i/pZU6kyVXSZaZalDX+QRCEu+rV0oKrnkOIraZBBdb6BKrE9v7bmPnvWIqIdZmeU5xnoNN01s9zuDjXOMMwWBD7j+MsZ2DNNrhAR0IaxMsV3GuYSHwBfAQ7sP1kmLgLmZL3bsdFgG8Y0lY8JtNq+wIfsodbLb9ILEGKef5iXSwhXQOv3DWTO5YszD5vTVViZVS/XYY7aDkGow6zrSW8lLmqPSJ16cxaz57XyaljIfu/9EfMRpseKocNpeWiERbiu14YQvQXHvILY/jf0m6wLtyI7NtaQrOVDaD5+ljhUIafAxbGt4WdnBvT+P37AM+uwcn5agfGpZ262+h4koAkwUAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/CDKMetadata/Default"
+   },
+   "Condition": "CDKMetadataAvailable"
+  }
+ },
+ "Conditions": {
+  "CDKMetadataAvailable": {
+   "Fn::Or": [
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "af-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-3"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-4"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-northwest-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-2"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "il-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "sa-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-1"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Equals": [
+      {
+       "Ref": "AWS::Region"
+      },
+      "us-west-2"
+     ]
+    }
+   ]
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}
