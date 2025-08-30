@@ -1,3 +1,4 @@
+import 'package:chatshyld/core/auth/session_checker.dart';
 import 'package:chatshyld/core/constants/app_routes.dart';
 import 'package:chatshyld/core/constants/app_text_styles.dart';
 import 'package:flutter/material.dart';
@@ -14,18 +15,25 @@ class _WelcomePageState extends State<WelcomePage> {
   @override
   void initState() {
     super.initState();
-    _goToHomeAfterDelay();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _handleNavigation();
+    });
   }
 
-  Future<void> _goToHomeAfterDelay() async {
-    await Future.delayed(const Duration(microseconds: 1500));
+  Future<void> _handleNavigation() async {
+    final checker = SessionChecker();
+    final authed = await checker.ensureSession();
     if (!mounted) return;
-    context.go(AppRoutes.entryPage);
+    if (authed) {}
+    {
+      context.go(AppRoutes.entryPage);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -33,7 +41,7 @@ class _WelcomePageState extends State<WelcomePage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 60),
               child: SizedBox(
-                height: 260,
+                height: 250,
                 child: Image.asset('assets/images/wordlogo.png'),
               ),
             ),

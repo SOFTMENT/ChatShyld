@@ -4,8 +4,9 @@ export class User {
   userId: string;
   phone: string;
   createdAt: string;
+  updatedAt?: string;
   name?: string;
-  photoUrl?: string;
+  photoKey?: string;
 
   constructor(phone: string) {
     this.userId = ulid();

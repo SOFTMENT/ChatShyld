@@ -18,7 +18,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::723609008675:role/cdk-hnb659fds-deploy-role-723609008675-${AWS::Region}",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::723609008675:role/cdk-hnb659fds-cfn-exec-role-723609008675-${AWS::Region}",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-723609008675-${AWS::Region}/863e7253c15d7f494f52bf57f3103a2410aad626ad9c9ca2eaaeffbe28a7c299.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-723609008675-${AWS::Region}/3bf8abe9c74ab1586a56e815fc745875bdcce703c0bb0b259327cb6797d8dd2e.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -74,6 +74,140 @@
             "data": "*"
           }
         ],
+        "/ChatshyldStack/RefreshTokenTable": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "partitionKey": {
+                "name": "*",
+                "type": "S"
+              },
+              "billingMode": "PAY_PER_REQUEST",
+              "removalPolicy": "destroy",
+              "timeToLiveAttribute": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addGlobalSecondaryIndex": [
+                {
+                  "indexName": "*",
+                  "partitionKey": {
+                    "name": "*",
+                    "type": "S"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "/ChatshyldStack/RefreshTokenTable/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RefreshTokenTable5CB955C2"
+          }
+        ],
+        "/ChatshyldStack/RefreshTokenTable/ScalingRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatshyldStack/AvatarBucket": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "removalPolicy": "destroy",
+              "autoDeleteObjects": true,
+              "blockPublicAccess": "*",
+              "publicReadAccess": false,
+              "cors": [
+                {
+                  "allowedMethods": [
+                    "POST",
+                    "PUT",
+                    "GET"
+                  ],
+                  "allowedOrigins": "*",
+                  "allowedHeaders": "*",
+                  "exposedHeaders": "*",
+                  "maxAge": "*"
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addCorsRule": [
+                {
+                  "allowedMethods": [
+                    "POST",
+                    "PUT",
+                    "GET"
+                  ],
+                  "allowedOrigins": "*",
+                  "allowedHeaders": "*",
+                  "exposedHeaders": "*",
+                  "maxAge": "*"
+                },
+                "*",
+                "*"
+              ]
+            }
+          }
+        ],
+        "/ChatshyldStack/AvatarBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AvatarBucket9BCAEBB3"
+          }
+        ],
+        "/ChatshyldStack/AvatarBucket/Policy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "bucket": "*"
+            }
+          }
+        ],
+        "/ChatshyldStack/AvatarBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AvatarBucketPolicy0083628B"
+          }
+        ],
+        "/ChatshyldStack/AvatarBucket/AutoDeleteObjectsCustomResource": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatshyldStack/AvatarBucket/AutoDeleteObjectsCustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AvatarBucketAutoDeleteObjectsCustomResourceF26E2298"
+          }
+        ],
+        "/ChatshyldStack/Custom::S3AutoDeleteObjectsCustomResourceProvider": [
+          {
+            "type": "aws:cdk:is-custom-resource-handler-customResourceProvider",
+            "data": true
+          }
+        ],
+        "/ChatshyldStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+          }
+        ],
+        "/ChatshyldStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F"
+          }
+        ],
         "/ChatshyldStack/SendOtpFn": [
           {
             "type": "aws:cdk:analytics:construct",
@@ -85,6 +219,26 @@
               "environment": "*",
               "code": "*"
             }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
           },
           {
             "type": "aws:cdk:analytics:method",
@@ -222,6 +376,26 @@
             "data": {}
           },
           {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
             "type": "aws:cdk:analytics:construct",
             "data": {
               "runtime": "*",
@@ -270,6 +444,14 @@
                 "*"
               ]
             }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
           }
         ],
         "/ChatshyldStack/VerifyOtpFn/ServiceRole/ImportServiceRole": [
@@ -312,6 +494,14 @@
                 {}
               ]
             }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
           }
         ],
         "/ChatshyldStack/VerifyOtpFn/ServiceRole/DefaultPolicy/Resource": [
@@ -340,9 +530,789 @@
             "data": "VerifyOtpFnLogGroup11DBF70E"
           }
         ],
+        "/ChatshyldStack/RefreshTokenFn": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "runtime": "*",
+              "entry": "*",
+              "handler": "*",
+              "timeout": "*",
+              "environment": "*",
+              "code": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "runtime": "*",
+              "entry": "*",
+              "handler": "*",
+              "timeout": "*",
+              "environment": "*"
+            }
+          }
+        ],
+        "/ChatshyldStack/RefreshTokenFn/ServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/ChatshyldStack/RefreshTokenFn/ServiceRole/ImportServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatshyldStack/RefreshTokenFn/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RefreshTokenFnServiceRole8719035D"
+          }
+        ],
+        "/ChatshyldStack/RefreshTokenFn/ServiceRole/DefaultPolicy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/ChatshyldStack/RefreshTokenFn/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RefreshTokenFnServiceRoleDefaultPolicy8145DA30"
+          }
+        ],
+        "/ChatshyldStack/RefreshTokenFn/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RefreshTokenFn26F5D4C4"
+          }
+        ],
+        "/ChatshyldStack/RefreshTokenFn/LogGroup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "logGroupName": "*"
+            }
+          }
+        ],
+        "/ChatshyldStack/RefreshTokenFn/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RefreshTokenFnLogGroup08B06CA8"
+          }
+        ],
+        "/ChatshyldStack/GetUserFn": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "runtime": "*",
+              "entry": "*",
+              "handler": "*",
+              "timeout": "*",
+              "environment": "*",
+              "code": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "runtime": "*",
+              "entry": "*",
+              "handler": "*",
+              "timeout": "*",
+              "environment": "*"
+            }
+          }
+        ],
+        "/ChatshyldStack/GetUserFn/ServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          }
+        ],
+        "/ChatshyldStack/GetUserFn/ServiceRole/ImportServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatshyldStack/GetUserFn/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GetUserFnServiceRoleFC2429D1"
+          }
+        ],
+        "/ChatshyldStack/GetUserFn/ServiceRole/DefaultPolicy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/ChatshyldStack/GetUserFn/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GetUserFnServiceRoleDefaultPolicyC8125AD0"
+          }
+        ],
+        "/ChatshyldStack/GetUserFn/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GetUserFn2C6EE015"
+          }
+        ],
+        "/ChatshyldStack/GetUserFn/LogGroup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "logGroupName": "*"
+            }
+          }
+        ],
+        "/ChatshyldStack/GetUserFn/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GetUserFnLogGroupE36C803E"
+          }
+        ],
+        "/ChatshyldStack/UpdateUserFn": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "runtime": "*",
+              "entry": "*",
+              "handler": "*",
+              "timeout": "*",
+              "environment": "*",
+              "code": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "runtime": "*",
+              "entry": "*",
+              "handler": "*",
+              "timeout": "*",
+              "environment": "*"
+            }
+          }
+        ],
+        "/ChatshyldStack/UpdateUserFn/ServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/ChatshyldStack/UpdateUserFn/ServiceRole/ImportServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatshyldStack/UpdateUserFn/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UpdateUserFnServiceRole19495F0B"
+          }
+        ],
+        "/ChatshyldStack/UpdateUserFn/ServiceRole/DefaultPolicy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/ChatshyldStack/UpdateUserFn/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UpdateUserFnServiceRoleDefaultPolicy43742191"
+          }
+        ],
+        "/ChatshyldStack/UpdateUserFn/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UpdateUserFn71C6325C"
+          }
+        ],
+        "/ChatshyldStack/UpdateUserFn/LogGroup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "logGroupName": "*"
+            }
+          }
+        ],
+        "/ChatshyldStack/UpdateUserFn/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UpdateUserFnLogGroupE8F9538A"
+          }
+        ],
+        "/ChatshyldStack/PresignAvatarFn": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "runtime": "*",
+              "entry": "*",
+              "handler": "*",
+              "timeout": "*",
+              "environment": "*",
+              "code": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "runtime": "*",
+              "entry": "*",
+              "handler": "*",
+              "timeout": "*",
+              "environment": "*"
+            }
+          }
+        ],
+        "/ChatshyldStack/PresignAvatarFn/ServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          }
+        ],
+        "/ChatshyldStack/PresignAvatarFn/ServiceRole/ImportServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatshyldStack/PresignAvatarFn/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PresignAvatarFnServiceRoleD3436466"
+          }
+        ],
+        "/ChatshyldStack/PresignAvatarFn/ServiceRole/DefaultPolicy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/ChatshyldStack/PresignAvatarFn/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PresignAvatarFnServiceRoleDefaultPolicy8ABFE28E"
+          }
+        ],
+        "/ChatshyldStack/PresignAvatarFn/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PresignAvatarFnFCD67BCC"
+          }
+        ],
+        "/ChatshyldStack/PresignAvatarFn/LogGroup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "logGroupName": "*"
+            }
+          }
+        ],
+        "/ChatshyldStack/PresignAvatarFn/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PresignAvatarFnLogGroup033FB278"
+          }
+        ],
         "/ChatshyldStack/ChatShyldHttpApi": [
           {
             "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
             "data": "*"
           },
           {
@@ -430,6 +1400,126 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "ChatShyldHttpApiPOSTauthverifyotpBA825DF7"
+          }
+        ],
+        "/ChatshyldStack/ChatShyldHttpApi/POST--auth--refresh": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatshyldStack/ChatShyldHttpApi/POST--auth--refresh/RefreshTokenIntegration": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatshyldStack/ChatShyldHttpApi/POST--auth--refresh/RefreshTokenIntegration/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatShyldHttpApiPOSTauthrefreshRefreshTokenIntegration910872C9"
+          }
+        ],
+        "/ChatshyldStack/ChatShyldHttpApi/POST--auth--refresh/RefreshTokenIntegration-Permission": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatShyldHttpApiPOSTauthrefreshRefreshTokenIntegrationPermissionF0D7FD20"
+          }
+        ],
+        "/ChatshyldStack/ChatShyldHttpApi/POST--auth--refresh/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatShyldHttpApiPOSTauthrefresh08188A25"
+          }
+        ],
+        "/ChatshyldStack/ChatShyldHttpApi/GET--profile--me": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatshyldStack/ChatShyldHttpApi/GET--profile--me/GetUserIntegration": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatshyldStack/ChatShyldHttpApi/GET--profile--me/GetUserIntegration/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatShyldHttpApiGETprofilemeGetUserIntegration6913437D"
+          }
+        ],
+        "/ChatshyldStack/ChatShyldHttpApi/GET--profile--me/GetUserIntegration-Permission": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatShyldHttpApiGETprofilemeGetUserIntegrationPermissionB32C0F9B"
+          }
+        ],
+        "/ChatshyldStack/ChatShyldHttpApi/GET--profile--me/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatShyldHttpApiGETprofileme5080206F"
+          }
+        ],
+        "/ChatshyldStack/ChatShyldHttpApi/PATCH--profile--me": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatshyldStack/ChatShyldHttpApi/PATCH--profile--me/UpdateUserIntegration": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatshyldStack/ChatShyldHttpApi/PATCH--profile--me/UpdateUserIntegration/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatShyldHttpApiPATCHprofilemeUpdateUserIntegration4CF6FBF6"
+          }
+        ],
+        "/ChatshyldStack/ChatShyldHttpApi/PATCH--profile--me/UpdateUserIntegration-Permission": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatShyldHttpApiPATCHprofilemeUpdateUserIntegrationPermission68E1C131"
+          }
+        ],
+        "/ChatshyldStack/ChatShyldHttpApi/PATCH--profile--me/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatShyldHttpApiPATCHprofilemeBB7D07F7"
+          }
+        ],
+        "/ChatshyldStack/ChatShyldHttpApi/POST--profile--avatar--presign": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatshyldStack/ChatShyldHttpApi/POST--profile--avatar--presign/PresignAvatarIntegration": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatshyldStack/ChatShyldHttpApi/POST--profile--avatar--presign/PresignAvatarIntegration/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatShyldHttpApiPOSTprofileavatarpresignPresignAvatarIntegration001E4C47"
+          }
+        ],
+        "/ChatshyldStack/ChatShyldHttpApi/POST--profile--avatar--presign/PresignAvatarIntegration-Permission": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatShyldHttpApiPOSTprofileavatarpresignPresignAvatarIntegrationPermissionEEA5E459"
+          }
+        ],
+        "/ChatshyldStack/ChatShyldHttpApi/POST--profile--avatar--presign/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatShyldHttpApiPOSTprofileavatarpresignCA542206"
           }
         ],
         "/ChatshyldStack/ProdStage": [

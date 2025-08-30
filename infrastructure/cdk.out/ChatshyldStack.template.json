@@ -41,6 +41,258 @@
     "aws:cdk:path": "ChatshyldStack/UsersTable/Resource"
    }
   },
+  "RefreshTokenTable5CB955C2": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "tokenId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "userId",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "GlobalSecondaryIndexes": [
+     {
+      "IndexName": "gsi_user",
+      "KeySchema": [
+       {
+        "AttributeName": "userId",
+        "KeyType": "HASH"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "tokenId",
+      "KeyType": "HASH"
+     }
+    ],
+    "TimeToLiveSpecification": {
+     "AttributeName": "ttl",
+     "Enabled": true
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/RefreshTokenTable/Resource"
+   }
+  },
+  "AvatarBucket9BCAEBB3": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "CorsConfiguration": {
+     "CorsRules": [
+      {
+       "AllowedHeaders": [
+        "*"
+       ],
+       "AllowedMethods": [
+        "POST",
+        "PUT",
+        "GET"
+       ],
+       "AllowedOrigins": [
+        "*"
+       ],
+       "ExposedHeaders": [
+        "ETag"
+       ],
+       "MaxAge": 3000
+      }
+     ]
+    },
+    "PublicAccessBlockConfiguration": {
+     "BlockPublicAcls": true,
+     "BlockPublicPolicy": false,
+     "IgnorePublicAcls": true,
+     "RestrictPublicBuckets": false
+    },
+    "Tags": [
+     {
+      "Key": "aws-cdk:auto-delete-objects",
+      "Value": "true"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/AvatarBucket/Resource"
+   }
+  },
+  "AvatarBucketPolicy0083628B": {
+   "Type": "AWS::S3::BucketPolicy",
+   "Properties": {
+    "Bucket": {
+     "Ref": "AvatarBucket9BCAEBB3"
+    },
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:DeleteObject*",
+        "s3:GetBucket*",
+        "s3:List*",
+        "s3:PutBucketPolicy"
+       ],
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": {
+         "Fn::GetAtt": [
+          "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+          "Arn"
+         ]
+        }
+       },
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "AvatarBucket9BCAEBB3",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "AvatarBucket9BCAEBB3",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "s3:GetObject",
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": "*"
+       },
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Fn::GetAtt": [
+            "AvatarBucket9BCAEBB3",
+            "Arn"
+           ]
+          },
+          "/avatars/*"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/AvatarBucket/Policy/Resource"
+   }
+  },
+  "AvatarBucketAutoDeleteObjectsCustomResourceF26E2298": {
+   "Type": "Custom::S3AutoDeleteObjects",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F",
+      "Arn"
+     ]
+    },
+    "BucketName": {
+     "Ref": "AvatarBucket9BCAEBB3"
+    }
+   },
+   "DependsOn": [
+    "AvatarBucketPolicy0083628B"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/AvatarBucket/AutoDeleteObjectsCustomResource/Default"
+   }
+  },
+  "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Version": "2012-10-17",
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ]
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role"
+   }
+  },
+  "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-723609008675-${AWS::Region}"
+     },
+     "S3Key": "faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6.zip"
+    },
+    "Timeout": 900,
+    "MemorySize": 128,
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Description": {
+     "Fn::Join": [
+      "",
+      [
+       "Lambda function for auto-deleting objects in ",
+       {
+        "Ref": "AvatarBucket9BCAEBB3"
+       },
+       " S3 bucket."
+      ]
+     ]
+    }
+   },
+   "DependsOn": [
+    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler",
+    "aws:asset:path": "asset.faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6",
+    "aws:asset:property": "Code"
+   }
+  },
   "SendOtpFnServiceRoleB9E4E0FE": {
    "Type": "AWS::IAM::Role",
    "Properties": {
@@ -82,7 +334,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-723609008675-${AWS::Region}"
      },
-     "S3Key": "dc8ce87bf34bd5b29389a0602c4e58498246c699d4b64e97b4103cd218dff9c7.zip"
+     "S3Key": "08647c2f8b4fa77dcc6801833fc7ce2ccff0acfee72aebf4c98e1a5af0ee9585.zip"
     },
     "Environment": {
      "Variables": {
@@ -95,7 +347,16 @@
       "TWILIO_ACCOUNT_SID": "AC256b1843957366ea8489ba3b1e27b34e",
       "TWILIO_AUTH_TOKEN": "6cd7cae52a56c472999d3175a95feb98",
       "TWILIO_VERIFY_SID": "VA8e18efe98dfb145f7ce00492939dd7ca",
-      "LOG_LEVEL": "INFO"
+      "LOG_LEVEL": "INFO",
+      "REFRESH_TABLE": {
+       "Ref": "RefreshTokenTable5CB955C2"
+      },
+      "REFRESH_TTL_DAYS": "30",
+      "REFRESH_PEPPER": "M8sAw26xTIoXoUJZdWXMbBgH0u9wNosAMxJ66EA0DVXaMGuoMsGg+tAoKZ4bIrFBYZOxRFvcCqbKdtYJpnHftA==",
+      "AVATARS_BUCKET": {
+       "Ref": "AvatarBucket9BCAEBB3"
+      },
+      "AVATAR_MAX_BYTES": "2097152"
      }
     },
     "Handler": "index.handler",
@@ -113,7 +374,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "ChatshyldStack/SendOtpFn/Resource",
-    "aws:asset:path": "asset.dc8ce87bf34bd5b29389a0602c4e58498246c699d4b64e97b4103cd218dff9c7",
+    "aws:asset:path": "asset.08647c2f8b4fa77dcc6801833fc7ce2ccff0acfee72aebf4c98e1a5af0ee9585",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -217,6 +478,38 @@
          ]
         }
        ]
+      },
+      {
+       "Action": [
+        "dynamodb:BatchWriteItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "RefreshTokenTable5CB955C2",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "RefreshTokenTable5CB955C2",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
       }
      ],
      "Version": "2012-10-17"
@@ -239,7 +532,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-723609008675-${AWS::Region}"
      },
-     "S3Key": "97f815716d9bf54a8948c9f515c34238ee9ad99839574c2ec514cdc385a4c784.zip"
+     "S3Key": "72c0073a49d179180e6b31d13c66f13b584c89c7762cd861e5a70ec7bbe4ad8d.zip"
     },
     "Environment": {
      "Variables": {
@@ -252,7 +545,16 @@
       "TWILIO_ACCOUNT_SID": "AC256b1843957366ea8489ba3b1e27b34e",
       "TWILIO_AUTH_TOKEN": "6cd7cae52a56c472999d3175a95feb98",
       "TWILIO_VERIFY_SID": "VA8e18efe98dfb145f7ce00492939dd7ca",
-      "LOG_LEVEL": "INFO"
+      "LOG_LEVEL": "INFO",
+      "REFRESH_TABLE": {
+       "Ref": "RefreshTokenTable5CB955C2"
+      },
+      "REFRESH_TTL_DAYS": "30",
+      "REFRESH_PEPPER": "M8sAw26xTIoXoUJZdWXMbBgH0u9wNosAMxJ66EA0DVXaMGuoMsGg+tAoKZ4bIrFBYZOxRFvcCqbKdtYJpnHftA==",
+      "AVATARS_BUCKET": {
+       "Ref": "AvatarBucket9BCAEBB3"
+      },
+      "AVATAR_MAX_BYTES": "2097152"
      }
     },
     "Handler": "index.handler",
@@ -271,7 +573,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "ChatshyldStack/VerifyOtpFn/Resource",
-    "aws:asset:path": "asset.97f815716d9bf54a8948c9f515c34238ee9ad99839574c2ec514cdc385a4c784",
+    "aws:asset:path": "asset.72c0073a49d179180e6b31d13c66f13b584c89c7762cd861e5a70ec7bbe4ad8d",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -296,6 +598,709 @@
    "DeletionPolicy": "Retain",
    "Metadata": {
     "aws:cdk:path": "ChatshyldStack/VerifyOtpFn/LogGroup/Resource"
+   }
+  },
+  "RefreshTokenFnServiceRole8719035D": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/RefreshTokenFn/ServiceRole/Resource"
+   }
+  },
+  "RefreshTokenFnServiceRoleDefaultPolicy8145DA30": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:Query",
+        "dynamodb:Scan"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "UsersTable9725E9C8",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "UsersTable9725E9C8",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "RefreshTokenTable5CB955C2",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "RefreshTokenTable5CB955C2",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "RefreshTokenFnServiceRoleDefaultPolicy8145DA30",
+    "Roles": [
+     {
+      "Ref": "RefreshTokenFnServiceRole8719035D"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/RefreshTokenFn/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "RefreshTokenFn26F5D4C4": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-723609008675-${AWS::Region}"
+     },
+     "S3Key": "163ccf7aa496fbea85122c0f40965968b02984d5bd818ce8d7fd1e0fe6ac7a9e.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "USERS_TABLE": {
+       "Ref": "UsersTable9725E9C8"
+      },
+      "PHONE_GSI": "gsi_phone",
+      "JWT_SECRET": "0c58fe6a71c3663728494eeb159cdf53c3b2098e26f34e67696313a8ce169df7c15d7f7f",
+      "JWT_TTL_SEC": "7200",
+      "TWILIO_ACCOUNT_SID": "AC256b1843957366ea8489ba3b1e27b34e",
+      "TWILIO_AUTH_TOKEN": "6cd7cae52a56c472999d3175a95feb98",
+      "TWILIO_VERIFY_SID": "VA8e18efe98dfb145f7ce00492939dd7ca",
+      "LOG_LEVEL": "INFO",
+      "REFRESH_TABLE": {
+       "Ref": "RefreshTokenTable5CB955C2"
+      },
+      "REFRESH_TTL_DAYS": "30",
+      "REFRESH_PEPPER": "M8sAw26xTIoXoUJZdWXMbBgH0u9wNosAMxJ66EA0DVXaMGuoMsGg+tAoKZ4bIrFBYZOxRFvcCqbKdtYJpnHftA==",
+      "AVATARS_BUCKET": {
+       "Ref": "AvatarBucket9BCAEBB3"
+      },
+      "AVATAR_MAX_BYTES": "2097152"
+     }
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "RefreshTokenFnServiceRole8719035D",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Timeout": 5
+   },
+   "DependsOn": [
+    "RefreshTokenFnServiceRoleDefaultPolicy8145DA30",
+    "RefreshTokenFnServiceRole8719035D"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/RefreshTokenFn/Resource",
+    "aws:asset:path": "asset.163ccf7aa496fbea85122c0f40965968b02984d5bd818ce8d7fd1e0fe6ac7a9e",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "RefreshTokenFnLogGroup08B06CA8": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "RefreshTokenFn26F5D4C4"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/RefreshTokenFn/LogGroup/Resource"
+   }
+  },
+  "GetUserFnServiceRoleFC2429D1": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/GetUserFn/ServiceRole/Resource"
+   }
+  },
+  "GetUserFnServiceRoleDefaultPolicyC8125AD0": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:Query",
+        "dynamodb:Scan"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "UsersTable9725E9C8",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "UsersTable9725E9C8",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "GetUserFnServiceRoleDefaultPolicyC8125AD0",
+    "Roles": [
+     {
+      "Ref": "GetUserFnServiceRoleFC2429D1"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/GetUserFn/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "GetUserFn2C6EE015": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-723609008675-${AWS::Region}"
+     },
+     "S3Key": "dea4c12609b3654430f1d8c42f76eb31c9fb7dc78293b95aebff8c905b6cab25.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "USERS_TABLE": {
+       "Ref": "UsersTable9725E9C8"
+      },
+      "PHONE_GSI": "gsi_phone",
+      "JWT_SECRET": "0c58fe6a71c3663728494eeb159cdf53c3b2098e26f34e67696313a8ce169df7c15d7f7f",
+      "JWT_TTL_SEC": "7200",
+      "TWILIO_ACCOUNT_SID": "AC256b1843957366ea8489ba3b1e27b34e",
+      "TWILIO_AUTH_TOKEN": "6cd7cae52a56c472999d3175a95feb98",
+      "TWILIO_VERIFY_SID": "VA8e18efe98dfb145f7ce00492939dd7ca",
+      "LOG_LEVEL": "INFO",
+      "REFRESH_TABLE": {
+       "Ref": "RefreshTokenTable5CB955C2"
+      },
+      "REFRESH_TTL_DAYS": "30",
+      "REFRESH_PEPPER": "M8sAw26xTIoXoUJZdWXMbBgH0u9wNosAMxJ66EA0DVXaMGuoMsGg+tAoKZ4bIrFBYZOxRFvcCqbKdtYJpnHftA==",
+      "AVATARS_BUCKET": {
+       "Ref": "AvatarBucket9BCAEBB3"
+      },
+      "AVATAR_MAX_BYTES": "2097152"
+     }
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "GetUserFnServiceRoleFC2429D1",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Timeout": 5
+   },
+   "DependsOn": [
+    "GetUserFnServiceRoleDefaultPolicyC8125AD0",
+    "GetUserFnServiceRoleFC2429D1"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/GetUserFn/Resource",
+    "aws:asset:path": "asset.dea4c12609b3654430f1d8c42f76eb31c9fb7dc78293b95aebff8c905b6cab25",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "GetUserFnLogGroupE36C803E": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "GetUserFn2C6EE015"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/GetUserFn/LogGroup/Resource"
+   }
+  },
+  "UpdateUserFnServiceRole19495F0B": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/UpdateUserFn/ServiceRole/Resource"
+   }
+  },
+  "UpdateUserFnServiceRoleDefaultPolicy43742191": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "UsersTable9725E9C8",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "UsersTable9725E9C8",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "s3:DeleteObject*",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Fn::GetAtt": [
+            "AvatarBucket9BCAEBB3",
+            "Arn"
+           ]
+          },
+          "/*"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "UpdateUserFnServiceRoleDefaultPolicy43742191",
+    "Roles": [
+     {
+      "Ref": "UpdateUserFnServiceRole19495F0B"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/UpdateUserFn/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "UpdateUserFn71C6325C": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-723609008675-${AWS::Region}"
+     },
+     "S3Key": "5d8c82758f807747aba16719b13125a9c2942993365b662eb11af0403b307d65.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "USERS_TABLE": {
+       "Ref": "UsersTable9725E9C8"
+      },
+      "PHONE_GSI": "gsi_phone",
+      "JWT_SECRET": "0c58fe6a71c3663728494eeb159cdf53c3b2098e26f34e67696313a8ce169df7c15d7f7f",
+      "JWT_TTL_SEC": "7200",
+      "TWILIO_ACCOUNT_SID": "AC256b1843957366ea8489ba3b1e27b34e",
+      "TWILIO_AUTH_TOKEN": "6cd7cae52a56c472999d3175a95feb98",
+      "TWILIO_VERIFY_SID": "VA8e18efe98dfb145f7ce00492939dd7ca",
+      "LOG_LEVEL": "INFO",
+      "REFRESH_TABLE": {
+       "Ref": "RefreshTokenTable5CB955C2"
+      },
+      "REFRESH_TTL_DAYS": "30",
+      "REFRESH_PEPPER": "M8sAw26xTIoXoUJZdWXMbBgH0u9wNosAMxJ66EA0DVXaMGuoMsGg+tAoKZ4bIrFBYZOxRFvcCqbKdtYJpnHftA==",
+      "AVATARS_BUCKET": {
+       "Ref": "AvatarBucket9BCAEBB3"
+      },
+      "AVATAR_MAX_BYTES": "2097152"
+     }
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "UpdateUserFnServiceRole19495F0B",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Timeout": 10
+   },
+   "DependsOn": [
+    "UpdateUserFnServiceRoleDefaultPolicy43742191",
+    "UpdateUserFnServiceRole19495F0B"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/UpdateUserFn/Resource",
+    "aws:asset:path": "asset.5d8c82758f807747aba16719b13125a9c2942993365b662eb11af0403b307d65",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "UpdateUserFnLogGroupE8F9538A": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "UpdateUserFn71C6325C"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/UpdateUserFn/LogGroup/Resource"
+   }
+  },
+  "PresignAvatarFnServiceRoleD3436466": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/PresignAvatarFn/ServiceRole/Resource"
+   }
+  },
+  "PresignAvatarFnServiceRoleDefaultPolicy8ABFE28E": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:Abort*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Fn::GetAtt": [
+            "AvatarBucket9BCAEBB3",
+            "Arn"
+           ]
+          },
+          "/*"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "PresignAvatarFnServiceRoleDefaultPolicy8ABFE28E",
+    "Roles": [
+     {
+      "Ref": "PresignAvatarFnServiceRoleD3436466"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/PresignAvatarFn/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "PresignAvatarFnFCD67BCC": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-723609008675-${AWS::Region}"
+     },
+     "S3Key": "23a356484dfbfdb895561a44dbf0a5c221502a608ebead8aca8d6107ca23a88a.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "USERS_TABLE": {
+       "Ref": "UsersTable9725E9C8"
+      },
+      "PHONE_GSI": "gsi_phone",
+      "JWT_SECRET": "0c58fe6a71c3663728494eeb159cdf53c3b2098e26f34e67696313a8ce169df7c15d7f7f",
+      "JWT_TTL_SEC": "7200",
+      "TWILIO_ACCOUNT_SID": "AC256b1843957366ea8489ba3b1e27b34e",
+      "TWILIO_AUTH_TOKEN": "6cd7cae52a56c472999d3175a95feb98",
+      "TWILIO_VERIFY_SID": "VA8e18efe98dfb145f7ce00492939dd7ca",
+      "LOG_LEVEL": "INFO",
+      "REFRESH_TABLE": {
+       "Ref": "RefreshTokenTable5CB955C2"
+      },
+      "REFRESH_TTL_DAYS": "30",
+      "REFRESH_PEPPER": "M8sAw26xTIoXoUJZdWXMbBgH0u9wNosAMxJ66EA0DVXaMGuoMsGg+tAoKZ4bIrFBYZOxRFvcCqbKdtYJpnHftA==",
+      "AVATARS_BUCKET": {
+       "Ref": "AvatarBucket9BCAEBB3"
+      },
+      "AVATAR_MAX_BYTES": "2097152"
+     }
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "PresignAvatarFnServiceRoleD3436466",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Timeout": 5
+   },
+   "DependsOn": [
+    "PresignAvatarFnServiceRoleDefaultPolicy8ABFE28E",
+    "PresignAvatarFnServiceRoleD3436466"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/PresignAvatarFn/Resource",
+    "aws:asset:path": "asset.23a356484dfbfdb895561a44dbf0a5c221502a608ebead8aca8d6107ca23a88a",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "PresignAvatarFnLogGroup033FB278": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "PresignAvatarFnFCD67BCC"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/PresignAvatarFn/LogGroup/Resource"
    }
   },
   "ChatShyldHttpApiE87B938B": {
@@ -490,6 +1495,322 @@
     "aws:cdk:path": "ChatshyldStack/ChatShyldHttpApi/POST--auth--verify-otp/Resource"
    }
   },
+  "ChatShyldHttpApiPOSTauthrefreshRefreshTokenIntegration910872C9": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatShyldHttpApiE87B938B"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::GetAtt": [
+      "RefreshTokenFn26F5D4C4",
+      "Arn"
+     ]
+    },
+    "PayloadFormatVersion": "2.0"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/ChatShyldHttpApi/POST--auth--refresh/RefreshTokenIntegration/Resource"
+   }
+  },
+  "ChatShyldHttpApiPOSTauthrefreshRefreshTokenIntegrationPermissionF0D7FD20": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "RefreshTokenFn26F5D4C4",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":723609008675:",
+       {
+        "Ref": "ChatShyldHttpApiE87B938B"
+       },
+       "/*/*/auth/refresh"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/ChatShyldHttpApi/POST--auth--refresh/RefreshTokenIntegration-Permission"
+   }
+  },
+  "ChatShyldHttpApiPOSTauthrefresh08188A25": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatShyldHttpApiE87B938B"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "POST /auth/refresh",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "ChatShyldHttpApiPOSTauthrefreshRefreshTokenIntegration910872C9"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/ChatShyldHttpApi/POST--auth--refresh/Resource"
+   }
+  },
+  "ChatShyldHttpApiGETprofilemeGetUserIntegration6913437D": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatShyldHttpApiE87B938B"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::GetAtt": [
+      "GetUserFn2C6EE015",
+      "Arn"
+     ]
+    },
+    "PayloadFormatVersion": "2.0"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/ChatShyldHttpApi/GET--profile--me/GetUserIntegration/Resource"
+   }
+  },
+  "ChatShyldHttpApiGETprofilemeGetUserIntegrationPermissionB32C0F9B": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "GetUserFn2C6EE015",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":723609008675:",
+       {
+        "Ref": "ChatShyldHttpApiE87B938B"
+       },
+       "/*/*/profile/me"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/ChatShyldHttpApi/GET--profile--me/GetUserIntegration-Permission"
+   }
+  },
+  "ChatShyldHttpApiGETprofileme5080206F": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatShyldHttpApiE87B938B"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "GET /profile/me",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "ChatShyldHttpApiGETprofilemeGetUserIntegration6913437D"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/ChatShyldHttpApi/GET--profile--me/Resource"
+   }
+  },
+  "ChatShyldHttpApiPATCHprofilemeUpdateUserIntegration4CF6FBF6": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatShyldHttpApiE87B938B"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::GetAtt": [
+      "UpdateUserFn71C6325C",
+      "Arn"
+     ]
+    },
+    "PayloadFormatVersion": "2.0"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/ChatShyldHttpApi/PATCH--profile--me/UpdateUserIntegration/Resource"
+   }
+  },
+  "ChatShyldHttpApiPATCHprofilemeUpdateUserIntegrationPermission68E1C131": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "UpdateUserFn71C6325C",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":723609008675:",
+       {
+        "Ref": "ChatShyldHttpApiE87B938B"
+       },
+       "/*/*/profile/me"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/ChatShyldHttpApi/PATCH--profile--me/UpdateUserIntegration-Permission"
+   }
+  },
+  "ChatShyldHttpApiPATCHprofilemeBB7D07F7": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatShyldHttpApiE87B938B"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "PATCH /profile/me",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "ChatShyldHttpApiPATCHprofilemeUpdateUserIntegration4CF6FBF6"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/ChatShyldHttpApi/PATCH--profile--me/Resource"
+   }
+  },
+  "ChatShyldHttpApiPOSTprofileavatarpresignPresignAvatarIntegration001E4C47": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatShyldHttpApiE87B938B"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::GetAtt": [
+      "PresignAvatarFnFCD67BCC",
+      "Arn"
+     ]
+    },
+    "PayloadFormatVersion": "2.0"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/ChatShyldHttpApi/POST--profile--avatar--presign/PresignAvatarIntegration/Resource"
+   }
+  },
+  "ChatShyldHttpApiPOSTprofileavatarpresignPresignAvatarIntegrationPermissionEEA5E459": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "PresignAvatarFnFCD67BCC",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":723609008675:",
+       {
+        "Ref": "ChatShyldHttpApiE87B938B"
+       },
+       "/*/*/profile/avatar/presign"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/ChatShyldHttpApi/POST--profile--avatar--presign/PresignAvatarIntegration-Permission"
+   }
+  },
+  "ChatShyldHttpApiPOSTprofileavatarpresignCA542206": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatShyldHttpApiE87B938B"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "POST /profile/avatar/presign",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "ChatShyldHttpApiPOSTprofileavatarpresignPresignAvatarIntegration001E4C47"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/ChatShyldHttpApi/POST--profile--avatar--presign/Resource"
+   }
+  },
   "ProdStage6F7F36FB": {
    "Type": "AWS::ApiGatewayV2::Stage",
    "Properties": {
@@ -499,7 +1820,7 @@
     "AutoDeploy": true,
     "DefaultRouteSettings": {
      "ThrottlingBurstLimit": 50,
-     "ThrottlingRateLimit": 25
+     "ThrottlingRateLimit": 30
     },
     "StageName": "prod"
    },
@@ -510,7 +1831,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/71UwY7aMBD9lvq4Mu4urXrgFiq6RaUrGuihQgiZeJo1OHZkO2yjKP/esRNSVqhqD6uVQHbezJt5Hs94zMZ3d+z2DX9yo0wcR0ruWbPyPDtShHaNqDUvjEBwzfcKNg0pufXSS6O/QE0mDUE7kAm5IZT4ugzbFWkp2UulpM6/GhGgZfJjt5ylu3T27ftstUZfC4U5cbU0SmYYhwhw3poaqQ3hQtwrs+dqBZnRgtt6rgX8IhNML8Pu4U/O/5RTWnOALPitOzRZLEi7bbf0408dj9ZSxYu94DuNkg+OPcTlU6UjCzPbSns5BAftbd3vH7kWCuw5LTqZyg9+J2mNLtC/R7KuJDfhqH/7vVCyl4v0urK3VPKCNamJHcedqwoQ03i/pZU6kyVXSZaZalDX+QRCEu+rV0oKrnkOIraZBBdb6BKrE9v7bmPnvWIqIdZmeU5xnoNN01s9zuDjXOMMwWBD7j+MsZ2DNNrhAR0IaxMsV3GuYSHwBfAQ7sP1kmLgLmZL3bsdFgG8Y0lY8JtNq+wIfsodbLb9ILEGKef5iXSwhXQOv3DWTO5YszD5vTVViZVS/XYY7aDkGow6zrSW8lLmqPSJ16cxaz57XyaljIfu/9EfMRpseKocNpeWiERbiu14YQvQXHvILY/jf0m6wLtyI7NtaQrOVDaD5+ljhUIafAxbGt4WdnBvT+P37AM+uwcn5agfGpZ262+h4koAkwUAAA=="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/+1X3U/bMBD/W/AjChl00x54C6wDtAJZWx6mqqqc+AhuHTuynUIV9X/f2UlKxdd4AAaoUlunv/v5PuyLfdcJO3t74e4WvTY7KZvtCJ6E1cDSdBYgNKnYQtJcMQSHNBEwqkhBteWWK/kLFmS/IigHsk+2SUDsonCPA7IMSMKF4DI7VcxBcfRnEnf7k37390V3MESuhlzNqYiV4CnqIQyM1WqBUytCGTsSKqFiAKmSjOrFiWRwQ/bRPHdPZ7c2n+lOodUUUscb1mjU65Hl2Fl75YBQC89hqHp8DpG1mielrfW/SqgY0zg4vJR+u5aB+RpWB2U6A4sKH3eRllb9AAEWzhO3TobsW10CRi1UOovLBGdEaQrGtL54qA+UtfAlFQYnpEob7z0VQl0DOwV7pZiDSHzuFyq+cL9H3SEZBy3rXPOMy1Z5Ax6jdtAtCDeFMnfBnN5EWbOa42Y9D9GDfing/3gReGSbNNtQr31QD/XCo1eJ/9u4fUur5Q35gBoYYUyC5gmjE4l5NzXhmR9+ltLnstvTUrr8at2TVi+a5ysqmQDdZgiSVGlXvDnXSubIb5C0zmuflc/8vJDtl9O0iWITxSaKdxbFOOA0D6u+8tUDNabMgR34C6zQXKa8oALvEFWunK05bkLkT7n2YM2ppBkwf0pyqG+ZdWwRabl+FbyhKcaGKm5NtPfrqGqkFuupqxOJ5QOsZP6K+Kfwab2bAN9/gJ8ghE+9R778cq4FTXXmPG4nDJWT3NNzH2YMeyYL7tQzay49BH8Y/R/FUb+D9ea5fmeC2QbWhJEbmuo5rJDSFs2eDjrnxuA/LLBVZsKqp7IjrcoCU1A0j6vWy1l+G9DH0rqyDGjBM4z2mi7mnbA6traICj5qOoyHvn4+cgLHxZXKYLQu8YiX9fHGhsc0jT3lRFrINPV9xlPm1nj1u4Sal8ugD0aVOn3UyJqO0liVr/Prl7IB7shjreYcmy/XHwV+k11U2JkvA9cjhVPzZd75Fn4Pd7emhvOdpowJ+/X4F6IvwLbxEAAA"
    },
    "Metadata": {
     "aws:cdk:path": "ChatshyldStack/CDKMetadata/Default"

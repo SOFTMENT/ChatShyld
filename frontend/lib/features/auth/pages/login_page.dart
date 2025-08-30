@@ -1,6 +1,7 @@
 import 'package:chatshyld/core/constants/app_colors.dart';
 import 'package:chatshyld/core/constants/app_routes.dart';
 import 'package:chatshyld/core/constants/app_scaffold.dart';
+import 'package:chatshyld/core/network/dio_client.dart';
 
 import 'package:chatshyld/core/services/country_picker_service.dart';
 import 'package:chatshyld/core/widgets/app_button.dart';
@@ -19,22 +20,55 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   String _selectedCountryCode = '+61'; // Default country code
   String _selectedFlag = "🇦🇺";
-
   final _numberCtrl = TextEditingController();
+  final _focus = FocusNode();
+  var _isLoading = false;
   @override
   void initState() {
-    getUserCountryDetails();
     super.initState();
+    getUserCountryDetails();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await Future.delayed(const Duration(milliseconds: 800));
+      _focus.requestFocus();
+    });
   }
 
-  void _getOTP() {
+  void _getOTP() async {
     final raw = _numberCtrl.text.trim();
     if (raw.isEmpty) {
       AppScaffoldMessenger.showScaffold(context, 'Enter phone number.');
       return;
     }
     final fullNumber = '$_selectedCountryCode$raw';
-    print('Requesting OTP for: $fullNumber');
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    final client = DioClient();
+    final auth = client.authRepo;
+    final res = await auth.sendOtp(fullNumber);
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (!mounted) return;
+
+    res.when(
+      ok: (_) {
+        context.push(AppRoutes.verifyOtpPage, extra: {'phone': fullNumber});
+      },
+      err: (e) {
+        final msg = switch (e.code) {
+          'invalid_input' => 'Please enter a valid phone number.',
+          'rate_limited' => 'Too many attempts. Try again later.',
+          'otp_send_failed' => 'Couldn’t send the code. Try again.',
+          _ => e.message ?? 'Request failed (${e.status}).',
+        };
+        AppScaffoldMessenger.showScaffold(context, msg);
+      },
+    );
   }
 
   void getUserCountryDetails() async {
@@ -149,6 +183,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
 
                         TextField(
+                          focusNode: _focus,
                           controller: _numberCtrl,
                           autofocus: true,
                           keyboardType: TextInputType.phone,
@@ -195,6 +230,7 @@ class _LoginPageState extends State<LoginPage> {
                 height: 50,
                 child: AppButton(
                   label: 'Get OTP',
+                  isLoading: _isLoading,
                   gradient: const LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
@@ -279,6 +315,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
+    _focus.dispose();
     _numberCtrl.dispose();
     super.dispose();
   }

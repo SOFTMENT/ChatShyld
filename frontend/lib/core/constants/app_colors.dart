@@ -26,6 +26,8 @@ class AppColors {
   static const Color textSecondary = Color(0xFF757575);
   static const Color textLightGrey = Color(0XFFB1B1B1);
 
+  static const Color pinkLight = Color(0xFFF37366);
+
   /// Borders, dividers, etc.
   static const Color divider = Color(0xFFBDBDBD);
 }
