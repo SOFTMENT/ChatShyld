@@ -6,4 +6,6 @@ class AppRoutes {
   static const String webView = '/webview';
   static const String setupProfilePage = '/setupProfilePage';
   static const String navigationBar = '/navigation';
+  static const String permissionPage = '/permissionPage';
+  static const String chatPage = '/chatPage';
 }

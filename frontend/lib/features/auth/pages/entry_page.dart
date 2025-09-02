@@ -35,7 +35,7 @@ class EntryPage extends StatelessWidget {
                       children: [
                         const SizedBox(height: 20),
                         const Text(
-                          'Welcome to ChatShyld',
+                          'Welcome to Chatshyld',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 20,

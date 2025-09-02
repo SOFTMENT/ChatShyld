@@ -3,7 +3,6 @@ import 'package:chatshyld/core/storage/token_storage.dart';
 import 'package:chatshyld/features/auth/data/models/result.dart';
 import 'package:chatshyld/features/auth/data/services/auth_api_service.dart';
 import 'package:dio/dio.dart';
-
 import '../models/auth_response.dart';
 
 class AuthRepository {
@@ -22,9 +21,17 @@ class AuthRepository {
     }
   }
 
-  Future<Result<AuthResponse>> verifyOtp(String phone, String code) async {
+  Future<Result<AuthResponse>> verifyOtp(
+    String countryCode,
+    String phone,
+    String code,
+  ) async {
     try {
-      final r = await _api.verifyOtp(phone: phone, code: code);
+      final r = await _api.verifyOtp(
+        countryCode: countryCode,
+        phone: phone,
+        code: code,
+      );
       await _storage.save(r.tokens.token, r.tokens.refreshToken);
 
       return Ok(r);
@@ -38,7 +45,11 @@ class AuthRepository {
   Future<Result<AuthResponse>> refresh() async {
     try {
       final rt = await _storage.refresh;
-      if (rt == null) return Err(ApiError(401, 'no_refresh_token'));
+      if (rt == null) {
+        return Err(
+          ApiError(401, 'no_refresh_token', 'Session expired. Please log in.'),
+        );
+      }
       final r = await _api.refresh(refreshToken: rt);
       await _storage.save(r.tokens.token, r.tokens.refreshToken);
       return Ok(r);

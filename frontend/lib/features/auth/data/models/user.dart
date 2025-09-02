@@ -9,6 +9,7 @@ class User {
     required this.userId,
     required this.phone,
     required this.createdAt,
+
     this.name,
     this.photoKey,
   });

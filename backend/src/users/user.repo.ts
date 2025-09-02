@@ -1,6 +1,7 @@
 import { dynamoDoc } from "@/shared/dynamodb";
 import { User } from "./user.types";
 import {
+  BatchGetCommand,
   GetCommand,
   PutCommand,
   QueryCommand,
@@ -29,15 +30,27 @@ export const findById = async (userId: string): Promise<User | null> => {
   return (r.Item as User) ?? null;
 };
 
-export const create = async (u: User) => {
-  await dynamoDoc.send(
-    new PutCommand({
-      TableName: cfg.usersTable,
-      Item: u,
-      ConditionExpression: "attribute_not_exists(userId)",
-    })
-  );
-  return u;
+export const batchGetByIds = async (ids: string[]): Promise<User[]> => {
+  const uniq = Array.from(new Set(ids)).map((id) => ({ userId: id }));
+  const out: User[] = [];
+
+  for (let i = 0; i < uniq.length; i += 100) {
+    const chunk = uniq.slice(i, i + 100);
+    let unprocessed: any = { [cfg.usersTable]: { Keys: chunk } };
+
+    do {
+      const r = await dynamoDoc.send(
+        new BatchGetCommand({
+          RequestItems: {
+            [cfg.usersTable]: { Keys: unprocessed[cfg.usersTable].Keys },
+          },
+        })
+      );
+      out.push(...((r.Responses?.[cfg.usersTable] as User[]) ?? []));
+      unprocessed = r.UnprocessedKeys ?? {};
+    } while (unprocessed && Object.keys(unprocessed).length);
+  }
+  return out;
 };
 
 export const updatePartial = async (
@@ -85,5 +98,5 @@ export const updatePartial = async (
   return r.Attributes as User;
 };
 
-const UsersRepo = { findByPhone, findById, create, updatePartial };
+const UsersRepo = { findByPhone, findById, batchGetByIds, updatePartial };
 export default UsersRepo;

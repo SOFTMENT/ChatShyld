@@ -1,6 +1,6 @@
 import 'package:chatshyld/core/constants/api.dart';
 import 'package:chatshyld/core/constants/app_colors.dart';
-import 'package:chatshyld/core/services/permission_service.dart';
+import 'package:chatshyld/features/permission/data/services/permission_service.dart';
 import 'package:chatshyld/core/widgets/image_picker_dialog.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -160,7 +160,7 @@ class ImageService {
   static String generateImageUrl({
     required String imagePath, // The path of the image in S3
   }) {
-    const baseURL = Api.baseUrl;
+    const baseURL = Api.imageBaseUrl;
 
     // Build the complete URL
     return "$baseURL$imagePath";

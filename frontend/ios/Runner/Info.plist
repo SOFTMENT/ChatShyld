@@ -2,6 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+
+<key>NSMicrophoneUsageDescription</key>
+<string>ChatShyld needs microphone access to let you record voice messages and make voice/video calls.</string>
+
+<key>NSContactsUsageDescription</key>
+<string>ChatShyld uses your contacts to help you find and connect with people you know. This is optional and can be changed in Settings.</string>
+
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -32,13 +39,17 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>ChatShyld needs access to your camera to enable you to capture pictures for profile.</string>
+	<string>Chatshyld needs access to your camera to enable you to capture pictures for profile.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>ChatShyld needs access to your photo library to allow you to select and upload pictures for your profile.</string>
+	<string>Chatshyld needs access to your photo library to allow you to select and upload pictures for your profile.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>ChatShyld needs access to your photo library to allow you to select and upload pictures for your profile.</string>
+	<string>Chatshyld needs access to your photo library to allow you to select and upload pictures for your profile.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

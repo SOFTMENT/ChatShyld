@@ -154,8 +154,8 @@ class _SetupProfilePageState extends State<SetupProfilePage> {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(1000),
                             child: SizedBox(
-                              height: 160,
-                              width: 160,
+                              height: 155,
+                              width: 155,
                               child: _image != null
                                   ? Image.file(_image!, fit: BoxFit.cover)
                                   : Image.asset(

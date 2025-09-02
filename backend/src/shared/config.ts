@@ -11,7 +11,7 @@ export const cfg = {
 
   avatarsBucket: process.env.AVATARS_BUCKET!,
   avatarMaxBytes: process.env.AVATAR_MAX_BYTES || "2097152",
-
+  phoneDirTable: process.env.PHONE_DIR_TABLE!,
   twilio: {
     accountSid: process.env.TWILIO_ACCOUNT_SID!,
     authToken: process.env.TWILIO_AUTH_TOKEN!,
@@ -30,6 +30,7 @@ export function assertConfig() {
     REFRESH_PEPPER: cfg.refreshPepper,
     AVATARS_BUCKET: cfg.avatarsBucket,
     AVATAR_MAX_BYTES: cfg.avatarMaxBytes,
+    PHONE_DIR_TABLE: cfg.phoneDirTable,
   })
     .filter(([, v]) => !v)
     .map(([k]) => k);

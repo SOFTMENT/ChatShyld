@@ -1,0 +1,2154 @@
+{
+ "Resources": {
+  "ChatAttachments15D39CA3": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "CorsConfiguration": {
+     "CorsRules": [
+      {
+       "AllowedHeaders": [
+        "*"
+       ],
+       "AllowedMethods": [
+        "POST",
+        "PUT",
+        "GET",
+        "HEAD"
+       ],
+       "AllowedOrigins": [
+        "*"
+       ],
+       "MaxAge": 3600
+      }
+     ]
+    },
+    "PublicAccessBlockConfiguration": {
+     "BlockPublicAcls": true,
+     "BlockPublicPolicy": true,
+     "IgnorePublicAcls": true,
+     "RestrictPublicBuckets": true
+    },
+    "Tags": [
+     {
+      "Key": "aws-cdk:auto-delete-objects",
+      "Value": "true"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/ChatAttachments/Resource"
+   }
+  },
+  "ChatAttachmentsPolicy880609C7": {
+   "Type": "AWS::S3::BucketPolicy",
+   "Properties": {
+    "Bucket": {
+     "Ref": "ChatAttachments15D39CA3"
+    },
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:DeleteObject*",
+        "s3:GetBucket*",
+        "s3:List*",
+        "s3:PutBucketPolicy"
+       ],
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": {
+         "Fn::GetAtt": [
+          "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+          "Arn"
+         ]
+        }
+       },
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "ChatAttachments15D39CA3",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "ChatAttachments15D39CA3",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/ChatAttachments/Policy/Resource"
+   }
+  },
+  "ChatAttachmentsAutoDeleteObjectsCustomResource09F36534": {
+   "Type": "Custom::S3AutoDeleteObjects",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F",
+      "Arn"
+     ]
+    },
+    "BucketName": {
+     "Ref": "ChatAttachments15D39CA3"
+    }
+   },
+   "DependsOn": [
+    "ChatAttachmentsPolicy880609C7"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/ChatAttachments/AutoDeleteObjectsCustomResource/Default"
+   }
+  },
+  "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Version": "2012-10-17",
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ]
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role"
+   }
+  },
+  "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-723609008675-ap-southeast-2",
+     "S3Key": "faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6.zip"
+    },
+    "Timeout": 900,
+    "MemorySize": 128,
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Description": {
+     "Fn::Join": [
+      "",
+      [
+       "Lambda function for auto-deleting objects in ",
+       {
+        "Ref": "ChatAttachments15D39CA3"
+       },
+       " S3 bucket."
+      ]
+     ]
+    }
+   },
+   "DependsOn": [
+    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler",
+    "aws:asset:path": "asset.faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6",
+    "aws:asset:property": "Code"
+   }
+  },
+  "ConnectionsTable8000B8A1": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "connectionId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "userId",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "GlobalSecondaryIndexes": [
+     {
+      "IndexName": "gsi_user",
+      "KeySchema": [
+       {
+        "AttributeName": "userId",
+        "KeyType": "HASH"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "connectionId",
+      "KeyType": "HASH"
+     }
+    ],
+    "TimeToLiveSpecification": {
+     "AttributeName": "ttl",
+     "Enabled": true
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/ConnectionsTable/Resource"
+   }
+  },
+  "ConversationsTableCD91EB96": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "convoId",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "KeySchema": [
+     {
+      "AttributeName": "convoId",
+      "KeyType": "HASH"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/ConversationsTable/Resource"
+   }
+  },
+  "MessagesTable05B58A27": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "convoId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "messageId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "toUser",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "createdAt",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "GlobalSecondaryIndexes": [
+     {
+      "IndexName": "gsi_user_time",
+      "KeySchema": [
+       {
+        "AttributeName": "toUser",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "createdAt",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "convoId",
+      "KeyType": "HASH"
+     },
+     {
+      "AttributeName": "messageId",
+      "KeyType": "RANGE"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/MessagesTable/Resource"
+   }
+  },
+  "WsConnectFnServiceRole749353A4": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/WsConnectFn/ServiceRole/Resource"
+   }
+  },
+  "WsConnectFnServiceRoleDefaultPolicyE8538EDC": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "ConnectionsTable8000B8A1",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "ConnectionsTable8000B8A1",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "WsConnectFnServiceRoleDefaultPolicyE8538EDC",
+    "Roles": [
+     {
+      "Ref": "WsConnectFnServiceRole749353A4"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/WsConnectFn/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "WsConnectFnB17D99F3": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-723609008675-ap-southeast-2",
+     "S3Key": "2123e0109a45b89a6a30329003ebee13f351457d2e289000d4b8234f54acdc0d.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "USERS_TABLE": "",
+      "JWT_SECRET": "0c58fe6a71c3663728494eeb159cdf53c3b2098e26f34e67696313a8ce169df7c15d7f7f",
+      "ATTACH_BUCKET": {
+       "Ref": "ChatAttachments15D39CA3"
+      },
+      "CONN_TABLE": {
+       "Ref": "ConnectionsTable8000B8A1"
+      },
+      "MSG_TABLE": {
+       "Ref": "MessagesTable05B58A27"
+      },
+      "CONVO_TABLE": {
+       "Ref": "ConversationsTableCD91EB96"
+      }
+     }
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "WsConnectFnServiceRole749353A4",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Timeout": 10
+   },
+   "DependsOn": [
+    "WsConnectFnServiceRoleDefaultPolicyE8538EDC",
+    "WsConnectFnServiceRole749353A4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/WsConnectFn/Resource",
+    "aws:asset:path": "asset.2123e0109a45b89a6a30329003ebee13f351457d2e289000d4b8234f54acdc0d",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "WsConnectFnLogGroupC9BADDD4": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "WsConnectFnB17D99F3"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/WsConnectFn/LogGroup/Resource"
+   }
+  },
+  "WsDisconnectFnServiceRoleF36033AD": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/WsDisconnectFn/ServiceRole/Resource"
+   }
+  },
+  "WsDisconnectFnServiceRoleDefaultPolicy76179A14": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "ConnectionsTable8000B8A1",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "ConnectionsTable8000B8A1",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "WsDisconnectFnServiceRoleDefaultPolicy76179A14",
+    "Roles": [
+     {
+      "Ref": "WsDisconnectFnServiceRoleF36033AD"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/WsDisconnectFn/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "WsDisconnectFn9523C1B1": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-723609008675-ap-southeast-2",
+     "S3Key": "3b50f48a91d6403354a53033984c41f7a223e71c7755d2f4a4f4e1a618321bd1.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "USERS_TABLE": "",
+      "JWT_SECRET": "0c58fe6a71c3663728494eeb159cdf53c3b2098e26f34e67696313a8ce169df7c15d7f7f",
+      "ATTACH_BUCKET": {
+       "Ref": "ChatAttachments15D39CA3"
+      },
+      "CONN_TABLE": {
+       "Ref": "ConnectionsTable8000B8A1"
+      },
+      "MSG_TABLE": {
+       "Ref": "MessagesTable05B58A27"
+      },
+      "CONVO_TABLE": {
+       "Ref": "ConversationsTableCD91EB96"
+      }
+     }
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "WsDisconnectFnServiceRoleF36033AD",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Timeout": 10
+   },
+   "DependsOn": [
+    "WsDisconnectFnServiceRoleDefaultPolicy76179A14",
+    "WsDisconnectFnServiceRoleF36033AD"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/WsDisconnectFn/Resource",
+    "aws:asset:path": "asset.3b50f48a91d6403354a53033984c41f7a223e71c7755d2f4a4f4e1a618321bd1",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "WsDisconnectFnLogGroupF23AFCC4": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "WsDisconnectFn9523C1B1"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/WsDisconnectFn/LogGroup/Resource"
+   }
+  },
+  "WsSendMessageFnServiceRole402D7D23": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/WsSendMessageFn/ServiceRole/Resource"
+   }
+  },
+  "WsSendMessageFnServiceRoleDefaultPolicy11820FA4": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:GetBucket*",
+        "s3:GetObject*",
+        "s3:List*"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "ChatAttachments15D39CA3",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "ChatAttachments15D39CA3",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:Query",
+        "dynamodb:Scan"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "ConnectionsTable8000B8A1",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "ConnectionsTable8000B8A1",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "ConversationsTableCD91EB96",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::GetAtt": [
+          "MessagesTable05B58A27",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "MessagesTable05B58A27",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        },
+        {
+         "Ref": "AWS::NoValue"
+        }
+       ]
+      },
+      {
+       "Action": "execute-api:ManageConnections",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:aws:execute-api:ap-southeast-2:723609008675:",
+          {
+           "Ref": "ChatWsApiD9A8005F"
+          },
+          "/prod/POST/@connections/*"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "WsSendMessageFnServiceRoleDefaultPolicy11820FA4",
+    "Roles": [
+     {
+      "Ref": "WsSendMessageFnServiceRole402D7D23"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/WsSendMessageFn/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "WsSendMessageFn00921F75": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-723609008675-ap-southeast-2",
+     "S3Key": "80ad33254932e63fca9835340bbde1f64494b8b5d1dccbb4f07e2985e38df219.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "USERS_TABLE": "",
+      "JWT_SECRET": "0c58fe6a71c3663728494eeb159cdf53c3b2098e26f34e67696313a8ce169df7c15d7f7f",
+      "ATTACH_BUCKET": {
+       "Ref": "ChatAttachments15D39CA3"
+      },
+      "CONN_TABLE": {
+       "Ref": "ConnectionsTable8000B8A1"
+      },
+      "MSG_TABLE": {
+       "Ref": "MessagesTable05B58A27"
+      },
+      "CONVO_TABLE": {
+       "Ref": "ConversationsTableCD91EB96"
+      }
+     }
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "WsSendMessageFnServiceRole402D7D23",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Timeout": 10
+   },
+   "DependsOn": [
+    "WsSendMessageFnServiceRoleDefaultPolicy11820FA4",
+    "WsSendMessageFnServiceRole402D7D23"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/WsSendMessageFn/Resource",
+    "aws:asset:path": "asset.80ad33254932e63fca9835340bbde1f64494b8b5d1dccbb4f07e2985e38df219",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "WsSendMessageFnLogGroupC1DD565B": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "WsSendMessageFn00921F75"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/WsSendMessageFn/LogGroup/Resource"
+   }
+  },
+  "WsTypingFnServiceRoleE1613406": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/WsTypingFn/ServiceRole/Resource"
+   }
+  },
+  "WsTypingFnServiceRoleDefaultPolicy05A11562": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:Query",
+        "dynamodb:Scan"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "ConnectionsTable8000B8A1",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "ConnectionsTable8000B8A1",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "execute-api:ManageConnections",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:aws:execute-api:ap-southeast-2:723609008675:",
+          {
+           "Ref": "ChatWsApiD9A8005F"
+          },
+          "/prod/POST/@connections/*"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "WsTypingFnServiceRoleDefaultPolicy05A11562",
+    "Roles": [
+     {
+      "Ref": "WsTypingFnServiceRoleE1613406"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/WsTypingFn/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "WsTypingFn98C24009": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-723609008675-ap-southeast-2",
+     "S3Key": "762a338c888c7a1d6ad3cec83e7d4edf351ac2140e38ffedd08909d0b8adab0a.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "USERS_TABLE": "",
+      "JWT_SECRET": "0c58fe6a71c3663728494eeb159cdf53c3b2098e26f34e67696313a8ce169df7c15d7f7f",
+      "ATTACH_BUCKET": {
+       "Ref": "ChatAttachments15D39CA3"
+      },
+      "CONN_TABLE": {
+       "Ref": "ConnectionsTable8000B8A1"
+      },
+      "MSG_TABLE": {
+       "Ref": "MessagesTable05B58A27"
+      },
+      "CONVO_TABLE": {
+       "Ref": "ConversationsTableCD91EB96"
+      }
+     }
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "WsTypingFnServiceRoleE1613406",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Timeout": 5
+   },
+   "DependsOn": [
+    "WsTypingFnServiceRoleDefaultPolicy05A11562",
+    "WsTypingFnServiceRoleE1613406"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/WsTypingFn/Resource",
+    "aws:asset:path": "asset.762a338c888c7a1d6ad3cec83e7d4edf351ac2140e38ffedd08909d0b8adab0a",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "WsTypingFnLogGroup0D04E7EB": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "WsTypingFn98C24009"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/WsTypingFn/LogGroup/Resource"
+   }
+  },
+  "WsPingFnServiceRoleE83E9A18": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/WsPingFn/ServiceRole/Resource"
+   }
+  },
+  "WsPingFnServiceRoleDefaultPolicyBC5A4E69": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "ConnectionsTable8000B8A1",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "ConnectionsTable8000B8A1",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "execute-api:ManageConnections",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:aws:execute-api:ap-southeast-2:723609008675:",
+          {
+           "Ref": "ChatWsApiD9A8005F"
+          },
+          "/prod/POST/@connections/*"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "WsPingFnServiceRoleDefaultPolicyBC5A4E69",
+    "Roles": [
+     {
+      "Ref": "WsPingFnServiceRoleE83E9A18"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/WsPingFn/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "WsPingFnC535B5AD": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-723609008675-ap-southeast-2",
+     "S3Key": "12abe05c4ca0bbd3aadecc3278ddaf5faee32790cd0749bf6173b8a29ec9850f.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "USERS_TABLE": "",
+      "JWT_SECRET": "0c58fe6a71c3663728494eeb159cdf53c3b2098e26f34e67696313a8ce169df7c15d7f7f",
+      "ATTACH_BUCKET": {
+       "Ref": "ChatAttachments15D39CA3"
+      },
+      "CONN_TABLE": {
+       "Ref": "ConnectionsTable8000B8A1"
+      },
+      "MSG_TABLE": {
+       "Ref": "MessagesTable05B58A27"
+      },
+      "CONVO_TABLE": {
+       "Ref": "ConversationsTableCD91EB96"
+      }
+     }
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "WsPingFnServiceRoleE83E9A18",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Timeout": 5
+   },
+   "DependsOn": [
+    "WsPingFnServiceRoleDefaultPolicyBC5A4E69",
+    "WsPingFnServiceRoleE83E9A18"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/WsPingFn/Resource",
+    "aws:asset:path": "asset.12abe05c4ca0bbd3aadecc3278ddaf5faee32790cd0749bf6173b8a29ec9850f",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "WsPingFnLogGroup30C0265D": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "WsPingFnC535B5AD"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/WsPingFn/LogGroup/Resource"
+   }
+  },
+  "InitUploadFnServiceRole541A3B75": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/InitUploadFn/ServiceRole/Resource"
+   }
+  },
+  "InitUploadFnServiceRoleDefaultPolicy83BD6657": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:Abort*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Fn::GetAtt": [
+            "ChatAttachments15D39CA3",
+            "Arn"
+           ]
+          },
+          "/*"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "InitUploadFnServiceRoleDefaultPolicy83BD6657",
+    "Roles": [
+     {
+      "Ref": "InitUploadFnServiceRole541A3B75"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/InitUploadFn/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "InitUploadFn6D79C87D": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-723609008675-ap-southeast-2",
+     "S3Key": "64fa60c230848f601d6863231e7f2b3b2e1ab0f70e4c01dd0961104ed7bd3122.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "USERS_TABLE": "",
+      "JWT_SECRET": "0c58fe6a71c3663728494eeb159cdf53c3b2098e26f34e67696313a8ce169df7c15d7f7f",
+      "ATTACH_BUCKET": {
+       "Ref": "ChatAttachments15D39CA3"
+      },
+      "CONN_TABLE": {
+       "Ref": "ConnectionsTable8000B8A1"
+      },
+      "MSG_TABLE": {
+       "Ref": "MessagesTable05B58A27"
+      },
+      "CONVO_TABLE": {
+       "Ref": "ConversationsTableCD91EB96"
+      }
+     }
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "InitUploadFnServiceRole541A3B75",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Timeout": 10
+   },
+   "DependsOn": [
+    "InitUploadFnServiceRoleDefaultPolicy83BD6657",
+    "InitUploadFnServiceRole541A3B75"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/InitUploadFn/Resource",
+    "aws:asset:path": "asset.64fa60c230848f601d6863231e7f2b3b2e1ab0f70e4c01dd0961104ed7bd3122",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "InitUploadFnLogGroup3A1E43BF": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "InitUploadFn6D79C87D"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/InitUploadFn/LogGroup/Resource"
+   }
+  },
+  "WsDefaultFnServiceRole423383DA": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/WsDefaultFn/ServiceRole/Resource"
+   }
+  },
+  "WsDefaultFn14DA6159": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-723609008675-ap-southeast-2",
+     "S3Key": "2d3fcad1f8b229ee71d10bd75bcb148c756cc20ad0b5fddf212701361c8fe275.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "USERS_TABLE": "",
+      "JWT_SECRET": "0c58fe6a71c3663728494eeb159cdf53c3b2098e26f34e67696313a8ce169df7c15d7f7f",
+      "ATTACH_BUCKET": {
+       "Ref": "ChatAttachments15D39CA3"
+      },
+      "CONN_TABLE": {
+       "Ref": "ConnectionsTable8000B8A1"
+      },
+      "MSG_TABLE": {
+       "Ref": "MessagesTable05B58A27"
+      },
+      "CONVO_TABLE": {
+       "Ref": "ConversationsTableCD91EB96"
+      }
+     }
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "WsDefaultFnServiceRole423383DA",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Timeout": 10
+   },
+   "DependsOn": [
+    "WsDefaultFnServiceRole423383DA"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/WsDefaultFn/Resource",
+    "aws:asset:path": "asset.2d3fcad1f8b229ee71d10bd75bcb148c756cc20ad0b5fddf212701361c8fe275",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "WsDefaultFnLogGroup16BB090A": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "WsDefaultFn14DA6159"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/WsDefaultFn/LogGroup/Resource"
+   }
+  },
+  "ChatWsApiD9A8005F": {
+   "Type": "AWS::ApiGatewayV2::Api",
+   "Properties": {
+    "Name": "ChatWsApi",
+    "ProtocolType": "WEBSOCKET",
+    "RouteSelectionExpression": "$request.body.action"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/ChatWsApi/Resource"
+   }
+  },
+  "ChatWsApiconnectRouteConnectIntPermission0D71FDF4": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "WsConnectFnB17D99F3",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-southeast-2:723609008675:",
+       {
+        "Ref": "ChatWsApiD9A8005F"
+       },
+       "/*$connect"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/ChatWsApi/$connect-Route/ConnectInt-Permission"
+   }
+  },
+  "ChatWsApiconnectRouteConnectIntED4D0871": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatWsApiD9A8005F"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/",
+       {
+        "Fn::GetAtt": [
+         "WsConnectFnB17D99F3",
+         "Arn"
+        ]
+       },
+       "/invocations"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/ChatWsApi/$connect-Route/ConnectInt/Resource"
+   }
+  },
+  "ChatWsApiconnectRoute882E9775": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatWsApiD9A8005F"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "$connect",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "ChatWsApiconnectRouteConnectIntED4D0871"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/ChatWsApi/$connect-Route/Resource"
+   }
+  },
+  "ChatWsApidisconnectRouteDisconnectIntPermission3D6C9BC9": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "WsDisconnectFn9523C1B1",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-southeast-2:723609008675:",
+       {
+        "Ref": "ChatWsApiD9A8005F"
+       },
+       "/*$disconnect"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/ChatWsApi/$disconnect-Route/DisconnectInt-Permission"
+   }
+  },
+  "ChatWsApidisconnectRouteDisconnectInt8A2058B9": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatWsApiD9A8005F"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/",
+       {
+        "Fn::GetAtt": [
+         "WsDisconnectFn9523C1B1",
+         "Arn"
+        ]
+       },
+       "/invocations"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/ChatWsApi/$disconnect-Route/DisconnectInt/Resource"
+   }
+  },
+  "ChatWsApidisconnectRouteD06DF2DC": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatWsApiD9A8005F"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "$disconnect",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "ChatWsApidisconnectRouteDisconnectInt8A2058B9"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/ChatWsApi/$disconnect-Route/Resource"
+   }
+  },
+  "ChatWsApisendMessageRouteMsgIntPermission2B5BCA19": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "WsSendMessageFn00921F75",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-southeast-2:723609008675:",
+       {
+        "Ref": "ChatWsApiD9A8005F"
+       },
+       "/*sendMessage"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/ChatWsApi/sendMessage-Route/MsgInt-Permission"
+   }
+  },
+  "ChatWsApisendMessageRouteMsgInt1D01750C": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatWsApiD9A8005F"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/",
+       {
+        "Fn::GetAtt": [
+         "WsSendMessageFn00921F75",
+         "Arn"
+        ]
+       },
+       "/invocations"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/ChatWsApi/sendMessage-Route/MsgInt/Resource"
+   }
+  },
+  "ChatWsApisendMessageRoute854683AF": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatWsApiD9A8005F"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "sendMessage",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "ChatWsApisendMessageRouteMsgInt1D01750C"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/ChatWsApi/sendMessage-Route/Resource"
+   }
+  },
+  "ChatWsApitypingRouteTypingIntPermission28CC696D": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "WsTypingFn98C24009",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-southeast-2:723609008675:",
+       {
+        "Ref": "ChatWsApiD9A8005F"
+       },
+       "/*typing"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/ChatWsApi/typing-Route/TypingInt-Permission"
+   }
+  },
+  "ChatWsApitypingRouteTypingInt740748DA": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatWsApiD9A8005F"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/",
+       {
+        "Fn::GetAtt": [
+         "WsTypingFn98C24009",
+         "Arn"
+        ]
+       },
+       "/invocations"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/ChatWsApi/typing-Route/TypingInt/Resource"
+   }
+  },
+  "ChatWsApitypingRoute41D2DE27": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatWsApiD9A8005F"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "typing",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "ChatWsApitypingRouteTypingInt740748DA"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/ChatWsApi/typing-Route/Resource"
+   }
+  },
+  "ChatWsApipingRoutePingIntPermissionFAD15060": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "WsPingFnC535B5AD",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-southeast-2:723609008675:",
+       {
+        "Ref": "ChatWsApiD9A8005F"
+       },
+       "/*ping"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/ChatWsApi/ping-Route/PingInt-Permission"
+   }
+  },
+  "ChatWsApipingRoutePingInt09F2D6D4": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatWsApiD9A8005F"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/",
+       {
+        "Fn::GetAtt": [
+         "WsPingFnC535B5AD",
+         "Arn"
+        ]
+       },
+       "/invocations"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/ChatWsApi/ping-Route/PingInt/Resource"
+   }
+  },
+  "ChatWsApipingRoute60D66454": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatWsApiD9A8005F"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "ping",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "ChatWsApipingRoutePingInt09F2D6D4"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/ChatWsApi/ping-Route/Resource"
+   }
+  },
+  "ChatWsApidefaultRouteDefaultIntPermissionE4EE2FBE": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "WsDefaultFn14DA6159",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-southeast-2:723609008675:",
+       {
+        "Ref": "ChatWsApiD9A8005F"
+       },
+       "/*$default"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/ChatWsApi/$default-Route/DefaultInt-Permission"
+   }
+  },
+  "ChatWsApidefaultRouteDefaultInt3C53A290": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatWsApiD9A8005F"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/",
+       {
+        "Fn::GetAtt": [
+         "WsDefaultFn14DA6159",
+         "Arn"
+        ]
+       },
+       "/invocations"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/ChatWsApi/$default-Route/DefaultInt/Resource"
+   }
+  },
+  "ChatWsApidefaultRoute5F9792C2": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatWsApiD9A8005F"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "$default",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "ChatWsApidefaultRouteDefaultInt3C53A290"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/ChatWsApi/$default-Route/Resource"
+   }
+  },
+  "ProdWsStageBB9117A3": {
+   "Type": "AWS::ApiGatewayV2::Stage",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatWsApiD9A8005F"
+    },
+    "AutoDeploy": true,
+    "StageName": "prod"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/ProdWsStage/Resource"
+   }
+  },
+  "ChatHttpA0B2C03F": {
+   "Type": "AWS::ApiGatewayV2::Api",
+   "Properties": {
+    "CorsConfiguration": {
+     "AllowHeaders": [
+      "*"
+     ],
+     "AllowMethods": [
+      "POST",
+      "OPTIONS"
+     ],
+     "AllowOrigins": [
+      "*"
+     ]
+    },
+    "Name": "ChatHttp",
+    "ProtocolType": "HTTP"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/ChatHttp/Resource"
+   }
+  },
+  "ChatHttpDefaultStage0AC252E0": {
+   "Type": "AWS::ApiGatewayV2::Stage",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatHttpA0B2C03F"
+    },
+    "AutoDeploy": true,
+    "StageName": "$default"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/ChatHttp/DefaultStage/Resource"
+   }
+  },
+  "ChatHttpPOSTattachmentsinituploadInitUploadInt97D75032": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatHttpA0B2C03F"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::GetAtt": [
+      "InitUploadFn6D79C87D",
+      "Arn"
+     ]
+    },
+    "PayloadFormatVersion": "2.0"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/ChatHttp/POST--attachments--init-upload/InitUploadInt/Resource"
+   }
+  },
+  "ChatHttpPOSTattachmentsinituploadInitUploadIntPermission384C77CB": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "InitUploadFn6D79C87D",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-southeast-2:723609008675:",
+       {
+        "Ref": "ChatHttpA0B2C03F"
+       },
+       "/*/*/attachments/init-upload"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/ChatHttp/POST--attachments--init-upload/InitUploadInt-Permission"
+   }
+  },
+  "ChatHttpPOSTattachmentsinituploadD27E22FF": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatHttpA0B2C03F"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "POST /attachments/init-upload",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "ChatHttpPOSTattachmentsinituploadInitUploadInt97D75032"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/ChatHttp/POST--attachments--init-upload/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/+1YbU/bMBD+LcvHyWSjTPuwb4F1gAaja4umCVWVEx/B4NiRX8qiKP99ZycpHRUvH8ZgW6W2se/Oz909uTRnD+LB9nb89hW9NlsZu9oSPI3riaXZFUHRvDY7cb3rsiuwZ3WUCpVdjVwqeJZkGRgTfYheRyTSUKgFFSOFigplDIzVqkINdVZ9BAEWTtJLyCyusNoBiTKlcYyYVAh1DexE85zLHrATHoO9UMzbRaOTyRQVo1P/uz/0vwfD5GM0WxofAGWge4SC/khyCJNm1hD0w9ge+hw7AX/KLwmS19GsmZG9c9nSSNpLy5XnNEy7QG/MWn1nvEsNnGEWrJK0UAzv0JSmAnB1SbXlliv5GZD4OkI9dJHYqvTDiY8j5UJwmR8r5kWj5Pt8NBzPx8Ovp8OQnuUFTNURX0Bireaps/DAre0o3RcqpWICmZKM6upQMvgR6OV+9OUmmkcGWmrlywTtpq00OTrqbuBvSvW+hB7pwihtny6I385q09VfqJmGCFqkjM4lxnZp4i/h8snJQDq60E76auhRcKic7Wapk8zn5V0VXPLzqn+cjXIa/xD2lLQg0fycCoO+IpALrpUsgjBg4EhX3fiCIh7obpa1bPkHp17/PFtgz+l7Q8qGlA0pG1I2pPy3pMwIp0Vcj1Xo96gxrgC2G972peYy4yUV2Iwrt4RqbfyCJLzU+2a0oJLmwELTwaHtvldlVaLlrw3zVI16F32rclZ3Wot7hItDiXnDUhd63QeVmxReQgr34z6d9p+nbpPgy0/wD6UQtl0egnTbfY/cxzZVXrMW8rqYsYmlFvzLwvTZvzygpxQ/dZB/C36op7aUGmJ25lijYE2c+Eu3r49rNOm388EcdMGNwRlu/VVu4vpI5ftauRILV3TD5ZGC9/yMwpBgH19DaMlzpOCaVotBXH+DdKL8cVhS8vAk3fENIGhDlgvG2KvBXUtmN3aH2KblmoaTkPvAV+zaJxzhb1DwtuXBW7ANM3JgbbkS9iwIVgz9dBllO70VzKxpyJ4zVhVjaNvKpYtecEs/0mrBGWh/ekhCjXiH2KeSVYS7WFxL+sTZ0tmG+IOj+NK8WQzexe/jt68uDedbXXscj9vrT8JSJfFWFgAA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatRealtimeStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "WsUrl": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      {
+       "Fn::GetAtt": [
+        "ChatWsApiD9A8005F",
+        "ApiEndpoint"
+       ]
+      },
+      "/prod"
+     ]
+    ]
+   }
+  },
+  "HttpUrl": {
+   "Value": {
+    "Fn::GetAtt": [
+     "ChatHttpA0B2C03F",
+     "ApiEndpoint"
+    ]
+   }
+  },
+  "AttachmentsBucket": {
+   "Value": {
+    "Ref": "ChatAttachments15D39CA3"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

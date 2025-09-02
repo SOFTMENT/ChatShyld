@@ -1,6 +1,8 @@
+import 'package:chatshyld/features/chat/pages/chat_page.dart';
+import 'package:chatshyld/features/contacts/data/models/matched_contact.dart';
 import 'package:chatshyld/features/navigation/pages/navigation_page.dart';
+import 'package:chatshyld/features/permission/pages/permission_page.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter/widgets.dart';
 
 import 'package:chatshyld/core/constants/app_routes.dart';
 import 'package:chatshyld/core/auth/auth_state.dart';
@@ -17,7 +19,7 @@ GoRouter makeAppRouter(AuthState auth) {
   return GoRouter(
     initialLocation: AppRoutes.welcomePage,
     refreshListenable: auth, // <- rebuild redirects when auth/me changes
-    redirect: (context, state) {
+    redirect: (context, state) async {
       // while bootstrapping, allow Welcome to show
       if (auth.status == AuthStatus.unknown) {
         return state.matchedLocation == AppRoutes.welcomePage
@@ -33,10 +35,12 @@ GoRouter makeAppRouter(AuthState auth) {
       final onLogin = state.matchedLocation == AppRoutes.loginPage;
       final onVerify = state.matchedLocation == AppRoutes.verifyOtpPage;
       final onSetup = state.matchedLocation == AppRoutes.setupProfilePage;
+      final onPermission = state.matchedLocation == AppRoutes.permissionPage;
+      final onWeb = state.matchedLocation == AppRoutes.webView;
 
       // Not logged in → allow only welcome/entry/login/verify
       if (!authed) {
-        if (onWelcome || onEntry || onLogin || onVerify) return null;
+        if (onWelcome || onEntry || onLogin || onVerify || onWeb) return null;
         return AppRoutes.entryPage;
       }
 
@@ -45,8 +49,19 @@ GoRouter makeAppRouter(AuthState auth) {
         return onSetup ? null : AppRoutes.setupProfilePage;
       }
 
+      final hasPermission = await auth.hasPermission;
+
+      if (!hasPermission) {
+        return onPermission ? null : AppRoutes.permissionPage;
+      }
+
       // Logged in & complete → block auth screens
-      if (onWelcome || onEntry || onLogin || onVerify || onSetup) {
+      if (onWelcome ||
+          onEntry ||
+          onLogin ||
+          onVerify ||
+          onSetup ||
+          onPermission) {
         return AppRoutes.navigationBar;
       }
 
@@ -72,6 +87,10 @@ GoRouter makeAppRouter(AuthState auth) {
         builder: (c, s) => const SetupProfilePage(),
       ),
       GoRoute(
+        path: AppRoutes.permissionPage,
+        builder: (c, s) => const PermissionPage(),
+      ),
+      GoRoute(
         path: AppRoutes.navigationBar,
         builder: (c, s) => const NavigationPage(),
       ),
@@ -83,6 +102,16 @@ GoRouter makeAppRouter(AuthState auth) {
             title: extra?['title'] ?? 'Web',
             url: extra?['url'] ?? '',
           );
+        },
+      ),
+
+      GoRoute(
+        path: AppRoutes.chatPage,
+        builder: (c, s) {
+          final extra = s.extra as Map<String, dynamic>?;
+          final matchedContact = extra?['contact'] as MatchedContact?;
+
+          return ChatPage(matchedContact: matchedContact);
         },
       ),
     ],

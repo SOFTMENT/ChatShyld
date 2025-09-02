@@ -30,4 +30,25 @@ class CountryPickerService {
       return null;
     }
   }
+
+  static Future<String?> detectUserCountryCode() async {
+    try {
+      // Get the current locale as a String (e.g., "en-US")
+      final localeString = await Devicelocale.currentLocale;
+
+      if (localeString != null) {
+        // Split the string to extract the country code
+        final parts = localeString.split('-');
+        if (parts.length >= 2) {
+          final countryCode = parts[1]; // The country code is the second part
+
+          return countryCode.toUpperCase();
+        }
+      }
+
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
 }

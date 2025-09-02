@@ -21,13 +21,14 @@ class AuthApi {
   }
 
   Future<AuthResponse> verifyOtp({
+    required String countryCode,
     required String phone,
     required String code,
   }) async {
     try {
       final res = await _dio.post(
         '/auth/verify-otp',
-        data: {'phone': phone, 'code': code},
+        data: {'countryCode': countryCode, 'phone': phone, 'code': code},
       );
       return AuthResponse.fromJson(res.data as Map<String, dynamic>);
     } on DioException catch (e) {

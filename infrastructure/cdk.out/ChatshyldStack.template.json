@@ -86,6 +86,29 @@
     "aws:cdk:path": "ChatshyldStack/RefreshTokenTable/Resource"
    }
   },
+  "PhoneDirectoryTable4C103417": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "phone",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "KeySchema": [
+     {
+      "AttributeName": "phone",
+      "KeyType": "HASH"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/PhoneDirectoryTable/Resource"
+   }
+  },
   "AvatarBucket9BCAEBB3": {
    "Type": "AWS::S3::Bucket",
    "Properties": {
@@ -256,9 +279,7 @@
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
-     "S3Bucket": {
-      "Fn::Sub": "cdk-hnb659fds-assets-723609008675-${AWS::Region}"
-     },
+     "S3Bucket": "cdk-hnb659fds-assets-723609008675-ap-southeast-2",
      "S3Key": "faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6.zip"
     },
     "Timeout": 900,
@@ -331,10 +352,8 @@
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
-     "S3Bucket": {
-      "Fn::Sub": "cdk-hnb659fds-assets-723609008675-${AWS::Region}"
-     },
-     "S3Key": "08647c2f8b4fa77dcc6801833fc7ce2ccff0acfee72aebf4c98e1a5af0ee9585.zip"
+     "S3Bucket": "cdk-hnb659fds-assets-723609008675-ap-southeast-2",
+     "S3Key": "6c0013dd6c36d7b117298f12a1010ca1d63102c76d75eecc5b946c251f631540.zip"
     },
     "Environment": {
      "Variables": {
@@ -348,6 +367,9 @@
       "TWILIO_AUTH_TOKEN": "6cd7cae52a56c472999d3175a95feb98",
       "TWILIO_VERIFY_SID": "VA8e18efe98dfb145f7ce00492939dd7ca",
       "LOG_LEVEL": "INFO",
+      "PHONE_DIR_TABLE": {
+       "Ref": "PhoneDirectoryTable4C103417"
+      },
       "REFRESH_TABLE": {
        "Ref": "RefreshTokenTable5CB955C2"
       },
@@ -374,7 +396,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "ChatshyldStack/SendOtpFn/Resource",
-    "aws:asset:path": "asset.08647c2f8b4fa77dcc6801833fc7ce2ccff0acfee72aebf4c98e1a5af0ee9585",
+    "aws:asset:path": "asset.6c0013dd6c36d7b117298f12a1010ca1d63102c76d75eecc5b946c251f631540",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -459,6 +481,12 @@
        "Resource": [
         {
          "Fn::GetAtt": [
+          "PhoneDirectoryTable4C103417",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::GetAtt": [
           "UsersTable9725E9C8",
           "Arn"
          ]
@@ -476,6 +504,9 @@
            "/index/*"
           ]
          ]
+        },
+        {
+         "Ref": "AWS::NoValue"
         }
        ]
       },
@@ -529,10 +560,8 @@
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
-     "S3Bucket": {
-      "Fn::Sub": "cdk-hnb659fds-assets-723609008675-${AWS::Region}"
-     },
-     "S3Key": "72c0073a49d179180e6b31d13c66f13b584c89c7762cd861e5a70ec7bbe4ad8d.zip"
+     "S3Bucket": "cdk-hnb659fds-assets-723609008675-ap-southeast-2",
+     "S3Key": "a19f31d018c751b5cb91e80de48995f917758476f6642669f50a064403953367.zip"
     },
     "Environment": {
      "Variables": {
@@ -546,6 +575,9 @@
       "TWILIO_AUTH_TOKEN": "6cd7cae52a56c472999d3175a95feb98",
       "TWILIO_VERIFY_SID": "VA8e18efe98dfb145f7ce00492939dd7ca",
       "LOG_LEVEL": "INFO",
+      "PHONE_DIR_TABLE": {
+       "Ref": "PhoneDirectoryTable4C103417"
+      },
       "REFRESH_TABLE": {
        "Ref": "RefreshTokenTable5CB955C2"
       },
@@ -573,7 +605,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "ChatshyldStack/VerifyOtpFn/Resource",
-    "aws:asset:path": "asset.72c0073a49d179180e6b31d13c66f13b584c89c7762cd861e5a70ec7bbe4ad8d",
+    "aws:asset:path": "asset.a19f31d018c751b5cb91e80de48995f917758476f6642669f50a064403953367",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -731,10 +763,8 @@
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
-     "S3Bucket": {
-      "Fn::Sub": "cdk-hnb659fds-assets-723609008675-${AWS::Region}"
-     },
-     "S3Key": "163ccf7aa496fbea85122c0f40965968b02984d5bd818ce8d7fd1e0fe6ac7a9e.zip"
+     "S3Bucket": "cdk-hnb659fds-assets-723609008675-ap-southeast-2",
+     "S3Key": "c7cb392502cad2bfaf920f1259c8b59c66616a7527bdb3667e5c2c52b61022b6.zip"
     },
     "Environment": {
      "Variables": {
@@ -748,6 +778,9 @@
       "TWILIO_AUTH_TOKEN": "6cd7cae52a56c472999d3175a95feb98",
       "TWILIO_VERIFY_SID": "VA8e18efe98dfb145f7ce00492939dd7ca",
       "LOG_LEVEL": "INFO",
+      "PHONE_DIR_TABLE": {
+       "Ref": "PhoneDirectoryTable4C103417"
+      },
       "REFRESH_TABLE": {
        "Ref": "RefreshTokenTable5CB955C2"
       },
@@ -775,7 +808,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "ChatshyldStack/RefreshTokenFn/Resource",
-    "aws:asset:path": "asset.163ccf7aa496fbea85122c0f40965968b02984d5bd818ce8d7fd1e0fe6ac7a9e",
+    "aws:asset:path": "asset.c7cb392502cad2bfaf920f1259c8b59c66616a7527bdb3667e5c2c52b61022b6",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -894,10 +927,8 @@
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
-     "S3Bucket": {
-      "Fn::Sub": "cdk-hnb659fds-assets-723609008675-${AWS::Region}"
-     },
-     "S3Key": "dea4c12609b3654430f1d8c42f76eb31c9fb7dc78293b95aebff8c905b6cab25.zip"
+     "S3Bucket": "cdk-hnb659fds-assets-723609008675-ap-southeast-2",
+     "S3Key": "13fab471098276e532b31d8310801be1fcb79174458ed38ff77178e91344ede3.zip"
     },
     "Environment": {
      "Variables": {
@@ -911,6 +942,9 @@
       "TWILIO_AUTH_TOKEN": "6cd7cae52a56c472999d3175a95feb98",
       "TWILIO_VERIFY_SID": "VA8e18efe98dfb145f7ce00492939dd7ca",
       "LOG_LEVEL": "INFO",
+      "PHONE_DIR_TABLE": {
+       "Ref": "PhoneDirectoryTable4C103417"
+      },
       "REFRESH_TABLE": {
        "Ref": "RefreshTokenTable5CB955C2"
       },
@@ -938,7 +972,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "ChatshyldStack/GetUserFn/Resource",
-    "aws:asset:path": "asset.dea4c12609b3654430f1d8c42f76eb31c9fb7dc78293b95aebff8c905b6cab25",
+    "aws:asset:path": "asset.13fab471098276e532b31d8310801be1fcb79174458ed38ff77178e91344ede3",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -1079,10 +1113,8 @@
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
-     "S3Bucket": {
-      "Fn::Sub": "cdk-hnb659fds-assets-723609008675-${AWS::Region}"
-     },
-     "S3Key": "5d8c82758f807747aba16719b13125a9c2942993365b662eb11af0403b307d65.zip"
+     "S3Bucket": "cdk-hnb659fds-assets-723609008675-ap-southeast-2",
+     "S3Key": "15f569aab3ae7c4a81b36c417ad83622f1961691d1821c000eda53aafe4bd298.zip"
     },
     "Environment": {
      "Variables": {
@@ -1096,6 +1128,9 @@
       "TWILIO_AUTH_TOKEN": "6cd7cae52a56c472999d3175a95feb98",
       "TWILIO_VERIFY_SID": "VA8e18efe98dfb145f7ce00492939dd7ca",
       "LOG_LEVEL": "INFO",
+      "PHONE_DIR_TABLE": {
+       "Ref": "PhoneDirectoryTable4C103417"
+      },
       "REFRESH_TABLE": {
        "Ref": "RefreshTokenTable5CB955C2"
       },
@@ -1123,7 +1158,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "ChatshyldStack/UpdateUserFn/Resource",
-    "aws:asset:path": "asset.5d8c82758f807747aba16719b13125a9c2942993365b662eb11af0403b307d65",
+    "aws:asset:path": "asset.15f569aab3ae7c4a81b36c417ad83622f1961691d1821c000eda53aafe4bd298",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -1148,6 +1183,179 @@
    "DeletionPolicy": "Retain",
    "Metadata": {
     "aws:cdk:path": "ChatshyldStack/UpdateUserFn/LogGroup/Resource"
+   }
+  },
+  "ContactsLookupFnServiceRole3FB37B9A": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/ContactsLookupFn/ServiceRole/Resource"
+   }
+  },
+  "ContactsLookupFnServiceRoleDefaultPolicy1D5A2B0D": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:Query",
+        "dynamodb:Scan"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "PhoneDirectoryTable4C103417",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::GetAtt": [
+          "UsersTable9725E9C8",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "UsersTable9725E9C8",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        },
+        {
+         "Ref": "AWS::NoValue"
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "ContactsLookupFnServiceRoleDefaultPolicy1D5A2B0D",
+    "Roles": [
+     {
+      "Ref": "ContactsLookupFnServiceRole3FB37B9A"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/ContactsLookupFn/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "ContactsLookupFn8F3C39D1": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-723609008675-ap-southeast-2",
+     "S3Key": "834879ecec3b08195c3f1ad173bd79f731ad9abe77906f83427c206fb243801d.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "USERS_TABLE": {
+       "Ref": "UsersTable9725E9C8"
+      },
+      "PHONE_GSI": "gsi_phone",
+      "JWT_SECRET": "0c58fe6a71c3663728494eeb159cdf53c3b2098e26f34e67696313a8ce169df7c15d7f7f",
+      "JWT_TTL_SEC": "7200",
+      "TWILIO_ACCOUNT_SID": "AC256b1843957366ea8489ba3b1e27b34e",
+      "TWILIO_AUTH_TOKEN": "6cd7cae52a56c472999d3175a95feb98",
+      "TWILIO_VERIFY_SID": "VA8e18efe98dfb145f7ce00492939dd7ca",
+      "LOG_LEVEL": "INFO",
+      "PHONE_DIR_TABLE": {
+       "Ref": "PhoneDirectoryTable4C103417"
+      },
+      "REFRESH_TABLE": {
+       "Ref": "RefreshTokenTable5CB955C2"
+      },
+      "REFRESH_TTL_DAYS": "30",
+      "REFRESH_PEPPER": "M8sAw26xTIoXoUJZdWXMbBgH0u9wNosAMxJ66EA0DVXaMGuoMsGg+tAoKZ4bIrFBYZOxRFvcCqbKdtYJpnHftA==",
+      "AVATARS_BUCKET": {
+       "Ref": "AvatarBucket9BCAEBB3"
+      },
+      "AVATAR_MAX_BYTES": "2097152"
+     }
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "ContactsLookupFnServiceRole3FB37B9A",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Timeout": 10
+   },
+   "DependsOn": [
+    "ContactsLookupFnServiceRoleDefaultPolicy1D5A2B0D",
+    "ContactsLookupFnServiceRole3FB37B9A"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/ContactsLookupFn/Resource",
+    "aws:asset:path": "asset.834879ecec3b08195c3f1ad173bd79f731ad9abe77906f83427c206fb243801d",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "ContactsLookupFnLogGroup306707C5": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "ContactsLookupFn8F3C39D1"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/ContactsLookupFn/LogGroup/Resource"
    }
   },
   "PresignAvatarFnServiceRoleD3436466": {
@@ -1232,10 +1440,8 @@
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
-     "S3Bucket": {
-      "Fn::Sub": "cdk-hnb659fds-assets-723609008675-${AWS::Region}"
-     },
-     "S3Key": "23a356484dfbfdb895561a44dbf0a5c221502a608ebead8aca8d6107ca23a88a.zip"
+     "S3Bucket": "cdk-hnb659fds-assets-723609008675-ap-southeast-2",
+     "S3Key": "63922978743b537588991e8d8df46e1b4a9a87523bb8d5cb4895891e269f69df.zip"
     },
     "Environment": {
      "Variables": {
@@ -1249,6 +1455,9 @@
       "TWILIO_AUTH_TOKEN": "6cd7cae52a56c472999d3175a95feb98",
       "TWILIO_VERIFY_SID": "VA8e18efe98dfb145f7ce00492939dd7ca",
       "LOG_LEVEL": "INFO",
+      "PHONE_DIR_TABLE": {
+       "Ref": "PhoneDirectoryTable4C103417"
+      },
       "REFRESH_TABLE": {
        "Ref": "RefreshTokenTable5CB955C2"
       },
@@ -1276,7 +1485,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "ChatshyldStack/PresignAvatarFn/Resource",
-    "aws:asset:path": "asset.23a356484dfbfdb895561a44dbf0a5c221502a608ebead8aca8d6107ca23a88a",
+    "aws:asset:path": "asset.63922978743b537588991e8d8df46e1b4a9a87523bb8d5cb4895891e269f69df",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -1371,15 +1580,7 @@
      "Fn::Join": [
       "",
       [
-       "arn:",
-       {
-        "Ref": "AWS::Partition"
-       },
-       ":execute-api:",
-       {
-        "Ref": "AWS::Region"
-       },
-       ":723609008675:",
+       "arn:aws:execute-api:ap-southeast-2:723609008675:",
        {
         "Ref": "ChatShyldHttpApiE87B938B"
        },
@@ -1450,15 +1651,7 @@
      "Fn::Join": [
       "",
       [
-       "arn:",
-       {
-        "Ref": "AWS::Partition"
-       },
-       ":execute-api:",
-       {
-        "Ref": "AWS::Region"
-       },
-       ":723609008675:",
+       "arn:aws:execute-api:ap-southeast-2:723609008675:",
        {
         "Ref": "ChatShyldHttpApiE87B938B"
        },
@@ -1529,15 +1722,7 @@
      "Fn::Join": [
       "",
       [
-       "arn:",
-       {
-        "Ref": "AWS::Partition"
-       },
-       ":execute-api:",
-       {
-        "Ref": "AWS::Region"
-       },
-       ":723609008675:",
+       "arn:aws:execute-api:ap-southeast-2:723609008675:",
        {
         "Ref": "ChatShyldHttpApiE87B938B"
        },
@@ -1608,15 +1793,7 @@
      "Fn::Join": [
       "",
       [
-       "arn:",
-       {
-        "Ref": "AWS::Partition"
-       },
-       ":execute-api:",
-       {
-        "Ref": "AWS::Region"
-       },
-       ":723609008675:",
+       "arn:aws:execute-api:ap-southeast-2:723609008675:",
        {
         "Ref": "ChatShyldHttpApiE87B938B"
        },
@@ -1687,15 +1864,7 @@
      "Fn::Join": [
       "",
       [
-       "arn:",
-       {
-        "Ref": "AWS::Partition"
-       },
-       ":execute-api:",
-       {
-        "Ref": "AWS::Region"
-       },
-       ":723609008675:",
+       "arn:aws:execute-api:ap-southeast-2:723609008675:",
        {
         "Ref": "ChatShyldHttpApiE87B938B"
        },
@@ -1732,6 +1901,77 @@
     "aws:cdk:path": "ChatshyldStack/ChatShyldHttpApi/PATCH--profile--me/Resource"
    }
   },
+  "ChatShyldHttpApiPOSTcontactslookupContactsLookupIntegrationE9271B3C": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatShyldHttpApiE87B938B"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::GetAtt": [
+      "ContactsLookupFn8F3C39D1",
+      "Arn"
+     ]
+    },
+    "PayloadFormatVersion": "2.0"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/ChatShyldHttpApi/POST--contacts--lookup/ContactsLookupIntegration/Resource"
+   }
+  },
+  "ChatShyldHttpApiPOSTcontactslookupContactsLookupIntegrationPermission3C88C743": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "ContactsLookupFn8F3C39D1",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-southeast-2:723609008675:",
+       {
+        "Ref": "ChatShyldHttpApiE87B938B"
+       },
+       "/*/*/contacts/lookup"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/ChatShyldHttpApi/POST--contacts--lookup/ContactsLookupIntegration-Permission"
+   }
+  },
+  "ChatShyldHttpApiPOSTcontactslookup7E7ECE58": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ChatShyldHttpApiE87B938B"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "POST /contacts/lookup",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "ChatShyldHttpApiPOSTcontactslookupContactsLookupIntegrationE9271B3C"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ChatshyldStack/ChatShyldHttpApi/POST--contacts--lookup/Resource"
+   }
+  },
   "ChatShyldHttpApiPOSTprofileavatarpresignPresignAvatarIntegration001E4C47": {
    "Type": "AWS::ApiGatewayV2::Integration",
    "Properties": {
@@ -1766,15 +2006,7 @@
      "Fn::Join": [
       "",
       [
-       "arn:",
-       {
-        "Ref": "AWS::Partition"
-       },
-       ":execute-api:",
-       {
-        "Ref": "AWS::Region"
-       },
-       ":723609008675:",
+       "arn:aws:execute-api:ap-southeast-2:723609008675:",
        {
         "Ref": "ChatShyldHttpApiE87B938B"
        },
@@ -1831,278 +2063,11 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/+1X3U/bMBD/W/AjChl00x54C6wDtAJZWx6mqqqc+AhuHTuynUIV9X/f2UlKxdd4AAaoUlunv/v5PuyLfdcJO3t74e4WvTY7KZvtCJ6E1cDSdBYgNKnYQtJcMQSHNBEwqkhBteWWK/kLFmS/IigHsk+2SUDsonCPA7IMSMKF4DI7VcxBcfRnEnf7k37390V3MESuhlzNqYiV4CnqIQyM1WqBUytCGTsSKqFiAKmSjOrFiWRwQ/bRPHdPZ7c2n+lOodUUUscb1mjU65Hl2Fl75YBQC89hqHp8DpG1mielrfW/SqgY0zg4vJR+u5aB+RpWB2U6A4sKH3eRllb9AAEWzhO3TobsW10CRi1UOovLBGdEaQrGtL54qA+UtfAlFQYnpEob7z0VQl0DOwV7pZiDSHzuFyq+cL9H3SEZBy3rXPOMy1Z5Ax6jdtAtCDeFMnfBnN5EWbOa42Y9D9GDfing/3gReGSbNNtQr31QD/XCo1eJ/9u4fUur5Q35gBoYYUyC5gmjE4l5NzXhmR9+ltLnstvTUrr8at2TVi+a5ysqmQDdZgiSVGlXvDnXSubIb5C0zmuflc/8vJDtl9O0iWITxSaKdxbFOOA0D6u+8tUDNabMgR34C6zQXKa8oALvEFWunK05bkLkT7n2YM2ppBkwf0pyqG+ZdWwRabl+FbyhKcaGKm5NtPfrqGqkFuupqxOJ5QOsZP6K+Kfwab2bAN9/gJ8ghE+9R778cq4FTXXmPG4nDJWT3NNzH2YMeyYL7tQzay49BH8Y/R/FUb+D9ea5fmeC2QbWhJEbmuo5rJDSFs2eDjrnxuA/LLBVZsKqp7IjrcoCU1A0j6vWy1l+G9DH0rqyDGjBM4z2mi7mnbA6traICj5qOoyHvn4+cgLHxZXKYLQu8YiX9fHGhsc0jT3lRFrINPV9xlPm1nj1u4Sal8ugD0aVOn3UyJqO0liVr/Prl7IB7shjreYcmy/XHwV+k11U2JkvA9cjhVPzZd75Fn4Pd7emhvOdpowJ+/X4F6IvwLbxEAAA"
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/+1YUW/aMBD+LfNjlWYtm/bAW9qxthptGdCHCSHkxNfU4NiR7dCiiP++s5NQ1mq0D6XVEBJg57vz3X32xfbRClvHx+HRJ3pvDhM2OxQ8DsuBpcksQGhSsoWkmWIIDmksYFSSnGrLLVfyJyxIuyQoB9ImByQgdpG77oAsAxJzIbhMLxVzUC/6Pel1+pN+59dNZzBEXQ2ZmlPRU4InaIcwMFarBQ4tCWXsTKiYigEkSjKqFxeSwQNpo3vuelePPl8ZTq7VFBKnN6zQqNsly7HztmVCaIVnMFRdPofIWs3jwlb2t0L1XTgtx8HprfQZsQzMl7A8KZIZWIz537NAC6u+gwAL17FbCkPaVheAQQiVzHpFjCOiJAFjGroe6gNlDXxLhcEBidLGTxAVQt0DuwR7p5iDSO/ax927cb9nnSEZB43WteYpl43xGjxH66AbEB5yZZ6CGX2I0nrBxvWSnWIE/ULAx0QReOSAjKtlqOY+qJpq4jGq2D/WYT+qVfJa+YQaGCEnQbOY0YnENJia8Mo3PwrpXxe3poV0KdyEJ61e1P07KpkA3WQWKqnCrvTmXCuZoX6NJFWa+cR//eeN3L+dpT2RPZE9kT2RdyEyDjjNwrKv/N2LGlNkwE78mZ5rLhOeU4HHoypW8VY6bkDkN/DmzMiopCkwfwBwqA7QdWwRabl+yr2jK8aGqte4aK4Oo7KWWryN3l1IvKjASuZPvxeFm+1ulu48/R0guAMUdn6Ndpqgv1i70IL63u0ibgYMlZM8s/McZgwLbgtu0zd/7U+vhrft9s3s/zeBbtm+T5wqZ1wBPcEkB2vCyDV1ORaWqNJUYV4ddMaNwSes2FRqwrKr0jOtihwzX9Td1d8FzvMHgp5gE98yoDlPcQru6WLeCstza/Mo5/5t2fD1NlAvcPo4hSmM1iUe8bI+XqBgk7WxV7uQFlJNfVX7kts13eodRw/LZdAHowqdbHT2xFZhrMrWx1WbRg08kfe0mnMs+11lHvhscCy5TJeBq87Dqfk8b30Nv4VHn6aG88P6lhn2q/YPny9H284TAAA="
    },
    "Metadata": {
     "aws:cdk:path": "ChatshyldStack/CDKMetadata/Default"
-   },
-   "Condition": "CDKMetadataAvailable"
-  }
- },
- "Conditions": {
-  "CDKMetadataAvailable": {
-   "Fn::Or": [
-    {
-     "Fn::Or": [
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "af-south-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ap-east-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ap-northeast-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ap-northeast-2"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ap-northeast-3"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ap-south-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ap-south-2"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ap-southeast-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ap-southeast-2"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ap-southeast-3"
-       ]
-      }
-     ]
-    },
-    {
-     "Fn::Or": [
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ap-southeast-4"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ca-central-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ca-west-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "cn-north-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "cn-northwest-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "eu-central-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "eu-central-2"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "eu-north-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "eu-south-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "eu-south-2"
-       ]
-      }
-     ]
-    },
-    {
-     "Fn::Or": [
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "eu-west-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "eu-west-2"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "eu-west-3"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "il-central-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "me-central-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "me-south-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "sa-east-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "us-east-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "us-east-2"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "us-west-1"
-       ]
-      }
-     ]
-    },
-    {
-     "Fn::Equals": [
-      {
-       "Ref": "AWS::Region"
-      },
-      "us-west-2"
-     ]
-    }
-   ]
+   }
   }
  },
  "Parameters": {

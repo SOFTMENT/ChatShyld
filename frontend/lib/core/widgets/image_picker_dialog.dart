@@ -1,3 +1,4 @@
+import 'package:chatshyld/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 enum ImagePickerSource { gallery, camera, none }
@@ -14,7 +15,7 @@ class ImagePickerDialog {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFF222222), Color(0xFF000000)],
+            colors: [AppColors.primaryDark, AppColors.primaryBlue],
           ), // dark grey
           borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
         ),

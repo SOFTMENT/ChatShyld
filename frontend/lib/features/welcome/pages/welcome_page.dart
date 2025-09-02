@@ -41,8 +41,9 @@ class _WelcomePageState extends State<WelcomePage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 60),
               child: SizedBox(
-                height: 250,
-                child: Image.asset('assets/images/wordlogo.png'),
+                height: 260,
+                width: 260,
+                child: Image.asset('assets/images/wordlogo.jpeg'),
               ),
             ),
             const SizedBox(height: 20),

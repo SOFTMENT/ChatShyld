@@ -12,6 +12,7 @@ import { assertConfig } from "@/shared/config.js";
 assertConfig();
 
 const schema = z.object({
+  countryCode: z.string(),
   phone: z.string().min(8),
   code: z.string().min(4).max(8),
 });
@@ -21,7 +22,11 @@ export const handler = async (
 ): Promise<APIGatewayProxyResultV2> => {
   try {
     const data = schema.parse(parse(event.body));
-    const result = await verifyOtpAndLogin(data.phone, data.code);
+    const result = await verifyOtpAndLogin(
+      data.countryCode,
+      data.phone,
+      data.code
+    );
     logger.info({
       message: "OTP verified",
       phone: data.phone,

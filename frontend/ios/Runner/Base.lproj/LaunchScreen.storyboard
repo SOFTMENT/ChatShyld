@@ -19,24 +19,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="LaunchImage" translatesAutoresizingMaskIntoConstraints="NO" id="YRO-k0-Ey4">
-                                <rect key="frame" x="196.33333333333334" y="426" width="0.33333333333334281" height="0.33333333333331439"/>
-                            </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chatshyld" translatesAutoresizingMaskIntoConstraints="NO" id="jjM-9M-CSv">
-                                <rect key="frame" x="60" y="296" width="273" height="260"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chatshyldlogo" translatesAutoresizingMaskIntoConstraints="NO" id="jjM-9M-CSv">
+                                <rect key="frame" x="66.666666666666686" y="296" width="260" height="260"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="260" id="8gO-Sx-avp"/>
+                                    <constraint firstAttribute="width" constant="260" id="Aoa-Br-jTL"/>
+                                    <constraint firstAttribute="height" constant="260" id="G01-7g-JsV"/>
                                 </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="jjM-9M-CSv" secondAttribute="trailing" constant="60" id="0oT-4o-FSV"/>
-                            <constraint firstItem="YRO-k0-Ey4" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="1a2-6s-vTC"/>
-                            <constraint firstItem="YRO-k0-Ey4" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="4X2-HB-R7a"/>
-                            <constraint firstItem="jjM-9M-CSv" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="9Mq-Xc-dYX"/>
-                            <constraint firstItem="jjM-9M-CSv" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" constant="60" id="Kq0-17-Ywh"/>
-                            <constraint firstItem="jjM-9M-CSv" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="ryh-Mg-UkX"/>
+                            <constraint firstItem="jjM-9M-CSv" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="2dI-62-pCC"/>
+                            <constraint firstItem="jjM-9M-CSv" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="Rjk-D5-LPh"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -46,7 +40,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="LaunchImage" width="0.3333333432674408" height="0.3333333432674408"/>
-        <image name="chatshyld" width="884" height="880"/>
+        <image name="chatshyldlogo" width="706" height="719"/>
     </resources>
 </document>

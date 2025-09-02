@@ -6,6 +6,7 @@ import 'package:chatshyld/core/constants/app_colors.dart';
 import 'package:chatshyld/core/constants/app_scaffold.dart';
 import 'package:chatshyld/core/network/api_error.dart';
 import 'package:chatshyld/core/network/dio_client.dart';
+import 'package:chatshyld/core/services/country_picker_service.dart';
 
 import 'package:chatshyld/core/widgets/app_button.dart';
 
@@ -71,8 +72,13 @@ class _VerifyOtpState extends State<VerifyOtpPage> {
 
     final repo = DioClient().authRepo;
     try {
-      // If you adopted Result<T> in the repo:
-      final res = await repo.verifyOtp(widget.fullPhoneNumber, code);
+      final iso = await CountryPickerService.detectUserCountryCode();
+
+      final res = await repo.verifyOtp(
+        iso ?? 'AU',
+        widget.fullPhoneNumber,
+        code,
+      );
       if (!mounted) return;
       res.when(
         ok: (data) async {

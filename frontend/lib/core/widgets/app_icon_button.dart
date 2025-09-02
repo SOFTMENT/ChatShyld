@@ -7,15 +7,18 @@ class AppIconButton extends StatelessWidget {
   final Color backgroundColor;
   final Color iconColor;
   final double borderRadius;
-
+  final double fill;
+  final double iconSize;
   const AppIconButton({
     super.key,
     required this.icon,
     this.onTap,
     this.size = 40,
+    this.iconSize = 32,
     this.backgroundColor = const Color(0xFFE6F0FF),
     this.iconColor = Colors.black,
     this.borderRadius = 12,
+    this.fill = 0,
   });
 
   @override
@@ -38,7 +41,7 @@ class AppIconButton extends StatelessWidget {
           ],
         ),
         child: Center(
-          child: Icon(icon, size: size * 0.45, color: iconColor),
+          child: Icon(icon, size: iconSize, color: iconColor, opticalSize: 1),
         ),
       ),
     );

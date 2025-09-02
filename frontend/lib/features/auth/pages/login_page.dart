@@ -28,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     getUserCountryDetails();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await Future.delayed(const Duration(milliseconds: 800));
+      await Future.delayed(const Duration(milliseconds: 150));
       _focus.requestFocus();
     });
   }
@@ -86,9 +86,11 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsetsGeometry.symmetric(
-            vertical: 20,
-            horizontal: 25,
+          padding: const EdgeInsetsGeometry.only(
+            top: 20,
+            left: 25,
+            right: 25,
+            bottom: 10,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -220,7 +222,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 10),
               const Text(
-                'ChatShyld will send you a SMS with a verification code.',
+                'Chatshyld will send you a SMS with a verification code.',
                 style: TextStyle(color: AppColors.textLightGrey, fontSize: 11),
               ),
               const Spacer(),
@@ -244,7 +246,7 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text(
-                    'By signing up for ChatShyld, you agree to',
+                    'By signing up for Chatshyld, you agree to',
                     style: TextStyle(
                       color: AppColors.textLightGrey,
                       fontSize: 10,

@@ -54,6 +54,12 @@ export class ChatShyldStack extends cdk.Stack {
       partitionKey: { name: "userId", type: AttributeType.STRING },
     });
 
+    const phoneDirTable = new Table(this, "PhoneDirectoryTable", {
+      partitionKey: { name: "phone", type: AttributeType.STRING },
+      billingMode: BillingMode.PAY_PER_REQUEST,
+      removalPolicy: RemovalPolicy.DESTROY,
+    });
+
     const avatarBucket = new s3.Bucket(this, "AvatarBucket", {
       removalPolicy: RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
@@ -94,6 +100,9 @@ export class ChatShyldStack extends cdk.Stack {
       TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN || "",
       TWILIO_VERIFY_SID: process.env.TWILIO_VERIFY_SID || "",
       LOG_LEVEL: process.env.LOG_LEVEL || "INFO",
+
+      //PhoneDirectory
+      PHONE_DIR_TABLE: phoneDirTable.tableName,
 
       // refresh-specific
       REFRESH_TABLE: refreshTokenTable.tableName,
@@ -162,6 +171,17 @@ export class ChatShyldStack extends cdk.Stack {
       environment: envCommon,
     });
 
+    const contactsLookupFn = new NodejsFunction(this, "ContactsLookupFn", {
+      runtime: Runtime.NODEJS_22_X,
+      entry: path.join(
+        __dirname,
+        "../../backend/src/handlers/contacts/lookup.handler.ts"
+      ),
+      handler: "handler",
+      timeout: Duration.seconds(10),
+      environment: envCommon,
+    });
+
     const presignAvatarFn = new NodejsFunction(this, "PresignAvatarFn", {
       runtime: Runtime.NODEJS_22_X,
       entry: path.join(
@@ -177,7 +197,7 @@ export class ChatShyldStack extends cdk.Stack {
 
     usersTable.grantReadWriteData(verifyOtpFn);
     usersTable.grantReadData(refreshTokenFn);
-
+    usersTable.grantReadData(contactsLookupFn);
     usersTable.grantReadData(getUserFn);
     usersTable.grantReadWriteData(updateUserFn);
 
@@ -186,6 +206,9 @@ export class ChatShyldStack extends cdk.Stack {
 
     avatarBucket.grantPut(presignAvatarFn);
     avatarBucket.grantDelete(updateUserFn);
+
+    phoneDirTable.grantReadWriteData(verifyOtpFn);
+    phoneDirTable.grantReadData(contactsLookupFn);
 
     // 5) Routes
 
@@ -241,6 +264,15 @@ export class ChatShyldStack extends cdk.Stack {
       integration: new HttpLambdaIntegration(
         "UpdateUserIntegration",
         updateUserFn
+      ),
+    });
+
+    httpApi.addRoutes({
+      path: "/contacts/lookup",
+      methods: [HttpMethod.POST],
+      integration: new HttpLambdaIntegration(
+        "ContactsLookupIntegration",
+        contactsLookupFn
       ),
     });
 

@@ -1,4 +1,5 @@
 import 'package:chatshyld/features/profile/data/services/profile_api_service.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:chatshyld/core/constants/app_colors.dart';
@@ -20,9 +21,21 @@ void main() async {
     ProfileApi(client.dio),
   );
 
-  auth.bootstrap();
+  await auth.bootstrap();
 
   final router = makeAppRouter(auth);
+
+  // runApp(
+  //   ChangeNotifierProvider.value(
+  //     value: auth,
+  //     child: kReleaseMode
+  //         ? App(router)
+  //         : DevicePreview(
+  //             enabled: true,
+  //             builder: (_) => App(router), // Wraps your app
+  //           ),
+  //   ),
+  // );
 
   runApp(ChangeNotifierProvider.value(value: auth, child: App(router)));
 }
@@ -32,7 +45,7 @@ class App extends StatelessWidget {
   final GoRouter router;
 
   ThemeData get theme {
-    final base = ThemeData.light().textTheme.apply(fontFamily: 'inter');
+    final base = ThemeData.light().textTheme.apply(fontFamily: 'Poppins');
     return ThemeData.light().copyWith(
       textTheme: base.copyWith(
         bodyLarge: base.bodyLarge?.copyWith(fontSize: 14.0),
@@ -46,8 +59,9 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      //   builder: kReleaseMode ? null : DevicePreview.appBuilder,
       debugShowCheckedModeBanner: false,
-      title: "ChatShyld",
+      title: "Chatshyld",
       theme: theme,
       routerConfig: router,
     );

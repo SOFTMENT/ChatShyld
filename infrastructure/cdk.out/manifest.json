@@ -11,21 +11,21 @@
     },
     "ChatshyldStack": {
       "type": "aws:cloudformation:stack",
-      "environment": "aws://723609008675/unknown-region",
+      "environment": "aws://723609008675/ap-southeast-2",
       "properties": {
         "templateFile": "ChatshyldStack.template.json",
         "terminationProtection": false,
         "validateOnSynth": false,
-        "assumeRoleArn": "arn:${AWS::Partition}:iam::723609008675:role/cdk-hnb659fds-deploy-role-723609008675-${AWS::Region}",
-        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::723609008675:role/cdk-hnb659fds-cfn-exec-role-723609008675-${AWS::Region}",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-723609008675-${AWS::Region}/3bf8abe9c74ab1586a56e815fc745875bdcce703c0bb0b259327cb6797d8dd2e.json",
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::723609008675:role/cdk-hnb659fds-deploy-role-723609008675-ap-southeast-2",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::723609008675:role/cdk-hnb659fds-cfn-exec-role-723609008675-ap-southeast-2",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-723609008675-ap-southeast-2/d421c74f3943db2027fe4053457caea4bcc38b84c257a62fda44a4ce0155c088.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
           "ChatshyldStack.assets"
         ],
         "lookupRole": {
-          "arn": "arn:${AWS::Partition}:iam::723609008675:role/cdk-hnb659fds-lookup-role-723609008675-${AWS::Region}",
+          "arn": "arn:${AWS::Partition}:iam::723609008675:role/cdk-hnb659fds-lookup-role-723609008675-ap-southeast-2",
           "requiresBootstrapStackVersion": 8,
           "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
         }
@@ -109,6 +109,31 @@
           }
         ],
         "/ChatshyldStack/RefreshTokenTable/ScalingRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatshyldStack/PhoneDirectoryTable": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "partitionKey": {
+                "name": "*",
+                "type": "S"
+              },
+              "billingMode": "PAY_PER_REQUEST",
+              "removalPolicy": "destroy"
+            }
+          }
+        ],
+        "/ChatshyldStack/PhoneDirectoryTable/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PhoneDirectoryTable4C103417"
+          }
+        ],
+        "/ChatshyldStack/PhoneDirectoryTable/ScalingRole": [
           {
             "type": "aws:cdk:analytics:construct",
             "data": "*"
@@ -219,6 +244,10 @@
               "environment": "*",
               "code": "*"
             }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
           },
           {
             "type": "aws:cdk:analytics:method",
@@ -396,6 +425,10 @@
             "data": {}
           },
           {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
             "type": "aws:cdk:analytics:construct",
             "data": {
               "runtime": "*",
@@ -442,6 +475,14 @@
             "data": {
               "attachInlinePolicy": [
                 "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
               ]
             }
           },
@@ -502,6 +543,14 @@
                 {}
               ]
             }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
           }
         ],
         "/ChatshyldStack/VerifyOtpFn/ServiceRole/DefaultPolicy/Resource": [
@@ -541,6 +590,10 @@
               "environment": "*",
               "code": "*"
             }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
           },
           {
             "type": "aws:cdk:analytics:method",
@@ -794,6 +847,10 @@
             "data": {}
           },
           {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
             "type": "aws:cdk:analytics:construct",
             "data": {
               "runtime": "*",
@@ -923,6 +980,10 @@
               "environment": "*",
               "code": "*"
             }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
           },
           {
             "type": "aws:cdk:analytics:method",
@@ -1111,6 +1172,209 @@
             "data": "UpdateUserFnLogGroupE8F9538A"
           }
         ],
+        "/ChatshyldStack/ContactsLookupFn": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "runtime": "*",
+              "entry": "*",
+              "handler": "*",
+              "timeout": "*",
+              "environment": "*",
+              "code": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "runtime": "*",
+              "entry": "*",
+              "handler": "*",
+              "timeout": "*",
+              "environment": "*"
+            }
+          }
+        ],
+        "/ChatshyldStack/ContactsLookupFn/ServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/ChatshyldStack/ContactsLookupFn/ServiceRole/ImportServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatshyldStack/ContactsLookupFn/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ContactsLookupFnServiceRole3FB37B9A"
+          }
+        ],
+        "/ChatshyldStack/ContactsLookupFn/ServiceRole/DefaultPolicy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/ChatshyldStack/ContactsLookupFn/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ContactsLookupFnServiceRoleDefaultPolicy1D5A2B0D"
+          }
+        ],
+        "/ChatshyldStack/ContactsLookupFn/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ContactsLookupFn8F3C39D1"
+          }
+        ],
+        "/ChatshyldStack/ContactsLookupFn/LogGroup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "logGroupName": "*"
+            }
+          }
+        ],
+        "/ChatshyldStack/ContactsLookupFn/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ContactsLookupFnLogGroup306707C5"
+          }
+        ],
         "/ChatshyldStack/PresignAvatarFn": [
           {
             "type": "aws:cdk:analytics:construct",
@@ -1122,6 +1386,10 @@
               "environment": "*",
               "code": "*"
             }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
           },
           {
             "type": "aws:cdk:analytics:method",
@@ -1322,6 +1590,10 @@
           {
             "type": "aws:cdk:analytics:method",
             "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": "*"
           }
         ],
         "/ChatshyldStack/ChatShyldHttpApi/Resource": [
@@ -1492,6 +1764,36 @@
             "data": "ChatShyldHttpApiPATCHprofilemeBB7D07F7"
           }
         ],
+        "/ChatshyldStack/ChatShyldHttpApi/POST--contacts--lookup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatshyldStack/ChatShyldHttpApi/POST--contacts--lookup/ContactsLookupIntegration": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatshyldStack/ChatShyldHttpApi/POST--contacts--lookup/ContactsLookupIntegration/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatShyldHttpApiPOSTcontactslookupContactsLookupIntegrationE9271B3C"
+          }
+        ],
+        "/ChatshyldStack/ChatShyldHttpApi/POST--contacts--lookup/ContactsLookupIntegration-Permission": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatShyldHttpApiPOSTcontactslookupContactsLookupIntegrationPermission3C88C743"
+          }
+        ],
+        "/ChatshyldStack/ChatShyldHttpApi/POST--contacts--lookup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatShyldHttpApiPOSTcontactslookup7E7ECE58"
+          }
+        ],
         "/ChatshyldStack/ChatShyldHttpApi/POST--profile--avatar--presign": [
           {
             "type": "aws:cdk:analytics:construct",
@@ -1540,12 +1842,6 @@
             "data": "CDKMetadata"
           }
         ],
-        "/ChatshyldStack/CDKMetadata/Condition": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "CDKMetadataAvailable"
-          }
-        ],
         "/ChatshyldStack/BootstrapVersion": [
           {
             "type": "aws:cdk:logicalId",
@@ -1560,6 +1856,1743 @@
         ]
       },
       "displayName": "ChatshyldStack"
+    },
+    "ChatRealtimeStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "ChatRealtimeStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "ChatRealtimeStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://723609008675/ap-southeast-2",
+      "properties": {
+        "templateFile": "ChatRealtimeStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::723609008675:role/cdk-hnb659fds-deploy-role-723609008675-ap-southeast-2",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::723609008675:role/cdk-hnb659fds-cfn-exec-role-723609008675-ap-southeast-2",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-723609008675-ap-southeast-2/ab56d07253d55ab30fd2f61b932bda50a05881b3e6dd6b058bdd441c1e0bca4c.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "ChatRealtimeStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::723609008675:role/cdk-hnb659fds-lookup-role-723609008675-ap-southeast-2",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "ChatRealtimeStack.assets"
+      ],
+      "metadata": {
+        "/ChatRealtimeStack/ChatAttachments": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "blockPublicAccess": "*",
+              "removalPolicy": "destroy",
+              "autoDeleteObjects": true,
+              "cors": [
+                {
+                  "allowedOrigins": "*",
+                  "allowedMethods": [
+                    "POST",
+                    "PUT",
+                    "GET",
+                    "HEAD"
+                  ],
+                  "allowedHeaders": "*",
+                  "maxAge": "*"
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addCorsRule": [
+                {
+                  "allowedOrigins": "*",
+                  "allowedMethods": [
+                    "POST",
+                    "PUT",
+                    "GET",
+                    "HEAD"
+                  ],
+                  "allowedHeaders": "*",
+                  "maxAge": "*"
+                },
+                "*",
+                "*"
+              ]
+            }
+          }
+        ],
+        "/ChatRealtimeStack/ChatAttachments/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatAttachments15D39CA3"
+          }
+        ],
+        "/ChatRealtimeStack/ChatAttachments/Policy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "bucket": "*"
+            }
+          }
+        ],
+        "/ChatRealtimeStack/ChatAttachments/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatAttachmentsPolicy880609C7"
+          }
+        ],
+        "/ChatRealtimeStack/ChatAttachments/AutoDeleteObjectsCustomResource": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatRealtimeStack/ChatAttachments/AutoDeleteObjectsCustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatAttachmentsAutoDeleteObjectsCustomResource09F36534"
+          }
+        ],
+        "/ChatRealtimeStack/Custom::S3AutoDeleteObjectsCustomResourceProvider": [
+          {
+            "type": "aws:cdk:is-custom-resource-handler-customResourceProvider",
+            "data": true
+          }
+        ],
+        "/ChatRealtimeStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+          }
+        ],
+        "/ChatRealtimeStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F"
+          }
+        ],
+        "/ChatRealtimeStack/ConnectionsTable": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "partitionKey": {
+                "name": "*",
+                "type": "S"
+              },
+              "billingMode": "PAY_PER_REQUEST",
+              "timeToLiveAttribute": "*",
+              "removalPolicy": "destroy"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addGlobalSecondaryIndex": [
+                {
+                  "indexName": "*",
+                  "partitionKey": {
+                    "name": "*",
+                    "type": "S"
+                  },
+                  "projectionType": "ALL"
+                }
+              ]
+            }
+          }
+        ],
+        "/ChatRealtimeStack/ConnectionsTable/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ConnectionsTable8000B8A1"
+          }
+        ],
+        "/ChatRealtimeStack/ConnectionsTable/ScalingRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatRealtimeStack/ConversationsTable": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "partitionKey": {
+                "name": "*",
+                "type": "S"
+              },
+              "billingMode": "PAY_PER_REQUEST",
+              "removalPolicy": "destroy"
+            }
+          }
+        ],
+        "/ChatRealtimeStack/ConversationsTable/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ConversationsTableCD91EB96"
+          }
+        ],
+        "/ChatRealtimeStack/ConversationsTable/ScalingRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatRealtimeStack/MessagesTable": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "partitionKey": {
+                "name": "*",
+                "type": "S"
+              },
+              "sortKey": {
+                "name": "*",
+                "type": "S"
+              },
+              "billingMode": "PAY_PER_REQUEST",
+              "removalPolicy": "destroy"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addGlobalSecondaryIndex": [
+                {
+                  "indexName": "*",
+                  "partitionKey": {
+                    "name": "*",
+                    "type": "S"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "/ChatRealtimeStack/MessagesTable/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MessagesTable05B58A27"
+          }
+        ],
+        "/ChatRealtimeStack/MessagesTable/ScalingRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatRealtimeStack/WsConnectFn": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "runtime": "*",
+              "timeout": "*",
+              "bundling": {
+                "minify": true,
+                "sourcesContent": false
+              },
+              "environment": "*",
+              "entry": "*",
+              "handler": "*",
+              "code": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "runtime": "*",
+              "timeout": "*",
+              "bundling": {
+                "minify": true,
+                "sourcesContent": false
+              },
+              "environment": "*",
+              "entry": "*",
+              "handler": "*"
+            }
+          }
+        ],
+        "/ChatRealtimeStack/WsConnectFn/ServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          }
+        ],
+        "/ChatRealtimeStack/WsConnectFn/ServiceRole/ImportServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatRealtimeStack/WsConnectFn/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WsConnectFnServiceRole749353A4"
+          }
+        ],
+        "/ChatRealtimeStack/WsConnectFn/ServiceRole/DefaultPolicy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/ChatRealtimeStack/WsConnectFn/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WsConnectFnServiceRoleDefaultPolicyE8538EDC"
+          }
+        ],
+        "/ChatRealtimeStack/WsConnectFn/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WsConnectFnB17D99F3"
+          }
+        ],
+        "/ChatRealtimeStack/WsConnectFn/LogGroup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "logGroupName": "*"
+            }
+          }
+        ],
+        "/ChatRealtimeStack/WsConnectFn/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WsConnectFnLogGroupC9BADDD4"
+          }
+        ],
+        "/ChatRealtimeStack/WsDisconnectFn": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "runtime": "*",
+              "timeout": "*",
+              "bundling": {
+                "minify": true,
+                "sourcesContent": false
+              },
+              "environment": "*",
+              "entry": "*",
+              "handler": "*",
+              "code": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "runtime": "*",
+              "timeout": "*",
+              "bundling": {
+                "minify": true,
+                "sourcesContent": false
+              },
+              "environment": "*",
+              "entry": "*",
+              "handler": "*"
+            }
+          }
+        ],
+        "/ChatRealtimeStack/WsDisconnectFn/ServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          }
+        ],
+        "/ChatRealtimeStack/WsDisconnectFn/ServiceRole/ImportServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatRealtimeStack/WsDisconnectFn/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WsDisconnectFnServiceRoleF36033AD"
+          }
+        ],
+        "/ChatRealtimeStack/WsDisconnectFn/ServiceRole/DefaultPolicy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/ChatRealtimeStack/WsDisconnectFn/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WsDisconnectFnServiceRoleDefaultPolicy76179A14"
+          }
+        ],
+        "/ChatRealtimeStack/WsDisconnectFn/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WsDisconnectFn9523C1B1"
+          }
+        ],
+        "/ChatRealtimeStack/WsDisconnectFn/LogGroup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "logGroupName": "*"
+            }
+          }
+        ],
+        "/ChatRealtimeStack/WsDisconnectFn/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WsDisconnectFnLogGroupF23AFCC4"
+          }
+        ],
+        "/ChatRealtimeStack/WsSendMessageFn": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "runtime": "*",
+              "timeout": "*",
+              "bundling": {
+                "minify": true,
+                "sourcesContent": false
+              },
+              "environment": "*",
+              "entry": "*",
+              "handler": "*",
+              "code": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "runtime": "*",
+              "timeout": "*",
+              "bundling": {
+                "minify": true,
+                "sourcesContent": false
+              },
+              "environment": "*",
+              "entry": "*",
+              "handler": "*"
+            }
+          }
+        ],
+        "/ChatRealtimeStack/WsSendMessageFn/ServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/ChatRealtimeStack/WsSendMessageFn/ServiceRole/ImportServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatRealtimeStack/WsSendMessageFn/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WsSendMessageFnServiceRole402D7D23"
+          }
+        ],
+        "/ChatRealtimeStack/WsSendMessageFn/ServiceRole/DefaultPolicy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/ChatRealtimeStack/WsSendMessageFn/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WsSendMessageFnServiceRoleDefaultPolicy11820FA4"
+          }
+        ],
+        "/ChatRealtimeStack/WsSendMessageFn/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WsSendMessageFn00921F75"
+          }
+        ],
+        "/ChatRealtimeStack/WsSendMessageFn/LogGroup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "logGroupName": "*"
+            }
+          }
+        ],
+        "/ChatRealtimeStack/WsSendMessageFn/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WsSendMessageFnLogGroupC1DD565B"
+          }
+        ],
+        "/ChatRealtimeStack/WsTypingFn": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "runtime": "*",
+              "timeout": "*",
+              "bundling": {
+                "minify": true,
+                "sourcesContent": false
+              },
+              "environment": "*",
+              "entry": "*",
+              "handler": "*",
+              "code": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "runtime": "*",
+              "timeout": "*",
+              "bundling": {
+                "minify": true,
+                "sourcesContent": false
+              },
+              "environment": "*",
+              "entry": "*",
+              "handler": "*"
+            }
+          }
+        ],
+        "/ChatRealtimeStack/WsTypingFn/ServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/ChatRealtimeStack/WsTypingFn/ServiceRole/ImportServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatRealtimeStack/WsTypingFn/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WsTypingFnServiceRoleE1613406"
+          }
+        ],
+        "/ChatRealtimeStack/WsTypingFn/ServiceRole/DefaultPolicy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/ChatRealtimeStack/WsTypingFn/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WsTypingFnServiceRoleDefaultPolicy05A11562"
+          }
+        ],
+        "/ChatRealtimeStack/WsTypingFn/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WsTypingFn98C24009"
+          }
+        ],
+        "/ChatRealtimeStack/WsTypingFn/LogGroup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "logGroupName": "*"
+            }
+          }
+        ],
+        "/ChatRealtimeStack/WsTypingFn/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WsTypingFnLogGroup0D04E7EB"
+          }
+        ],
+        "/ChatRealtimeStack/WsPingFn": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "runtime": "*",
+              "timeout": "*",
+              "bundling": {
+                "minify": true,
+                "sourcesContent": false
+              },
+              "environment": "*",
+              "entry": "*",
+              "handler": "*",
+              "code": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "runtime": "*",
+              "timeout": "*",
+              "bundling": {
+                "minify": true,
+                "sourcesContent": false
+              },
+              "environment": "*",
+              "entry": "*",
+              "handler": "*"
+            }
+          }
+        ],
+        "/ChatRealtimeStack/WsPingFn/ServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/ChatRealtimeStack/WsPingFn/ServiceRole/ImportServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatRealtimeStack/WsPingFn/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WsPingFnServiceRoleE83E9A18"
+          }
+        ],
+        "/ChatRealtimeStack/WsPingFn/ServiceRole/DefaultPolicy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/ChatRealtimeStack/WsPingFn/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WsPingFnServiceRoleDefaultPolicyBC5A4E69"
+          }
+        ],
+        "/ChatRealtimeStack/WsPingFn/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WsPingFnC535B5AD"
+          }
+        ],
+        "/ChatRealtimeStack/WsPingFn/LogGroup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "logGroupName": "*"
+            }
+          }
+        ],
+        "/ChatRealtimeStack/WsPingFn/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WsPingFnLogGroup30C0265D"
+          }
+        ],
+        "/ChatRealtimeStack/InitUploadFn": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "runtime": "*",
+              "timeout": "*",
+              "bundling": {
+                "minify": true,
+                "sourcesContent": false
+              },
+              "environment": "*",
+              "entry": "*",
+              "handler": "*",
+              "code": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "runtime": "*",
+              "timeout": "*",
+              "bundling": {
+                "minify": true,
+                "sourcesContent": false
+              },
+              "environment": "*",
+              "entry": "*",
+              "handler": "*"
+            }
+          }
+        ],
+        "/ChatRealtimeStack/InitUploadFn/ServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          }
+        ],
+        "/ChatRealtimeStack/InitUploadFn/ServiceRole/ImportServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatRealtimeStack/InitUploadFn/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "InitUploadFnServiceRole541A3B75"
+          }
+        ],
+        "/ChatRealtimeStack/InitUploadFn/ServiceRole/DefaultPolicy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/ChatRealtimeStack/InitUploadFn/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "InitUploadFnServiceRoleDefaultPolicy83BD6657"
+          }
+        ],
+        "/ChatRealtimeStack/InitUploadFn/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "InitUploadFn6D79C87D"
+          }
+        ],
+        "/ChatRealtimeStack/InitUploadFn/LogGroup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "logGroupName": "*"
+            }
+          }
+        ],
+        "/ChatRealtimeStack/InitUploadFn/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "InitUploadFnLogGroup3A1E43BF"
+          }
+        ],
+        "/ChatRealtimeStack/WsDefaultFn": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "runtime": "*",
+              "timeout": "*",
+              "bundling": {
+                "minify": true,
+                "sourcesContent": false
+              },
+              "environment": "*",
+              "entry": "*",
+              "handler": "*",
+              "code": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "runtime": "*",
+              "timeout": "*",
+              "bundling": {
+                "minify": true,
+                "sourcesContent": false
+              },
+              "environment": "*",
+              "entry": "*",
+              "handler": "*"
+            }
+          }
+        ],
+        "/ChatRealtimeStack/WsDefaultFn/ServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          }
+        ],
+        "/ChatRealtimeStack/WsDefaultFn/ServiceRole/ImportServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatRealtimeStack/WsDefaultFn/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WsDefaultFnServiceRole423383DA"
+          }
+        ],
+        "/ChatRealtimeStack/WsDefaultFn/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WsDefaultFn14DA6159"
+          }
+        ],
+        "/ChatRealtimeStack/WsDefaultFn/LogGroup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "logGroupName": "*"
+            }
+          }
+        ],
+        "/ChatRealtimeStack/WsDefaultFn/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WsDefaultFnLogGroup16BB090A"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": "*"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatWsApiD9A8005F"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi/$connect-Route": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi/$connect-Route/ConnectInt-Permission": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatWsApiconnectRouteConnectIntPermission0D71FDF4"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi/$connect-Route/ConnectInt": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi/$connect-Route/ConnectInt/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatWsApiconnectRouteConnectIntED4D0871"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi/$connect-Route/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatWsApiconnectRoute882E9775"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi/$disconnect-Route": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi/$disconnect-Route/DisconnectInt-Permission": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatWsApidisconnectRouteDisconnectIntPermission3D6C9BC9"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi/$disconnect-Route/DisconnectInt": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi/$disconnect-Route/DisconnectInt/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatWsApidisconnectRouteDisconnectInt8A2058B9"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi/$disconnect-Route/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatWsApidisconnectRouteD06DF2DC"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi/sendMessage-Route": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi/sendMessage-Route/MsgInt-Permission": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatWsApisendMessageRouteMsgIntPermission2B5BCA19"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi/sendMessage-Route/MsgInt": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi/sendMessage-Route/MsgInt/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatWsApisendMessageRouteMsgInt1D01750C"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi/sendMessage-Route/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatWsApisendMessageRoute854683AF"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi/typing-Route": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi/typing-Route/TypingInt-Permission": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatWsApitypingRouteTypingIntPermission28CC696D"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi/typing-Route/TypingInt": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi/typing-Route/TypingInt/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatWsApitypingRouteTypingInt740748DA"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi/typing-Route/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatWsApitypingRoute41D2DE27"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi/ping-Route": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi/ping-Route/PingInt-Permission": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatWsApipingRoutePingIntPermissionFAD15060"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi/ping-Route/PingInt": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi/ping-Route/PingInt/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatWsApipingRoutePingInt09F2D6D4"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi/ping-Route/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatWsApipingRoute60D66454"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi/$default-Route": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi/$default-Route/DefaultInt-Permission": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatWsApidefaultRouteDefaultIntPermissionE4EE2FBE"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi/$default-Route/DefaultInt": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi/$default-Route/DefaultInt/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatWsApidefaultRouteDefaultInt3C53A290"
+          }
+        ],
+        "/ChatRealtimeStack/ChatWsApi/$default-Route/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatWsApidefaultRoute5F9792C2"
+          }
+        ],
+        "/ChatRealtimeStack/ProdWsStage": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatRealtimeStack/ProdWsStage/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProdWsStageBB9117A3"
+          }
+        ],
+        "/ChatRealtimeStack/ChatHttp": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": "*"
+          }
+        ],
+        "/ChatRealtimeStack/ChatHttp/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatHttpA0B2C03F"
+          }
+        ],
+        "/ChatRealtimeStack/ChatHttp/DefaultStage": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatRealtimeStack/ChatHttp/DefaultStage/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatHttpDefaultStage0AC252E0"
+          }
+        ],
+        "/ChatRealtimeStack/ChatHttp/POST--attachments--init-upload": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatRealtimeStack/ChatHttp/POST--attachments--init-upload/InitUploadInt": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ChatRealtimeStack/ChatHttp/POST--attachments--init-upload/InitUploadInt/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatHttpPOSTattachmentsinituploadInitUploadInt97D75032"
+          }
+        ],
+        "/ChatRealtimeStack/ChatHttp/POST--attachments--init-upload/InitUploadInt-Permission": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatHttpPOSTattachmentsinituploadInitUploadIntPermission384C77CB"
+          }
+        ],
+        "/ChatRealtimeStack/ChatHttp/POST--attachments--init-upload/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatHttpPOSTattachmentsinituploadD27E22FF"
+          }
+        ],
+        "/ChatRealtimeStack/WsUrl": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WsUrl"
+          }
+        ],
+        "/ChatRealtimeStack/HttpUrl": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HttpUrl"
+          }
+        ],
+        "/ChatRealtimeStack/AttachmentsBucket": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AttachmentsBucket"
+          }
+        ],
+        "/ChatRealtimeStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/ChatRealtimeStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/ChatRealtimeStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "ChatRealtimeStack"
     },
     "Tree": {
       "type": "cdk:tree",
